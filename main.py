@@ -13,13 +13,12 @@ logging.basicConfig(
 )
 
 def main():
-    gui.GUI()
-    be.BattleEngine()
+    battle = be.BattleEngine()
+    gui.GUI(battle)
 
     
 
 
-for x in range(5):
-    
-    main()
+
+main()
 

@@ -95,7 +95,8 @@ class UserPokemon(BasePokemon):
 
 class BattlingPokemon(UserPokemon):
     def __init__(self, pokemon: UserPokemon):
-         
+        
+        self.UserPokemon = pokemon
         self.pokemon_name = pokemon.base_pokemon.pokemon_name
         self.typing = pokemon.base_pokemon.typing
         self.moveset = pokemon.moveset
@@ -104,7 +105,7 @@ class BattlingPokemon(UserPokemon):
         self.stats = pokemon.stats
         
 
-        self.current_HP: int = pokemon.stats["hp"]
+        self.current_HP: int = self.UserPokemon.stats["hp"]
 
         self.is_fainted: bool = False
 
@@ -113,11 +114,15 @@ class BattlingPokemon(UserPokemon):
     
     def reduce_HP(self, value:int):
         self.current_HP -= value
-    
+
         if self.current_HP < 0:
             self.current_HP = 0
             self.is_fainted = True
             print(f"{self.pokemon_name} has Fainted")
         
         print(f"{self.pokemon_name}'s HP was reduced by {value}\n HP is now {self.current_HP}")
+    
+    def reset_pokemon(self):
+        self.current_HP: int = self.UserPokemon.stats["hp"]
+        self.is_fainted: bool = False
             

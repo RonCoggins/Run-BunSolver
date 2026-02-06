@@ -152,3 +152,12 @@ class BattlingTeam:
 
         return number_remaining
 
+    def reset_team(self):
+        self.team : td.TeamDict = {}
+        self.generate_team()
+        self.active_pokemon:p.BattlingPokemon = self.team["slot1"]
+        self.remaining_pokemon: td.TeamDict = self.team.copy()
+        self.fainted_pokemon: td.TeamDict = {}
+        
+        for pokemon in self.team.values():
+            pokemon.reset_pokemon()

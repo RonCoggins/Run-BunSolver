@@ -1,3 +1,6 @@
+
+
+from typing import Any
 import move as m
 import pokemon as p
 import team as t
@@ -24,6 +27,12 @@ class GameState():
             self.battle_over = True
             return True
         return False
+    
+    def reset_state(self):
+        self.battle_over: bool = False
+        self.winner: str = ""
+        self.opponent_info.team.reset_team()
+        self.player_info.team.reset_team()
 
 class GameStateOpponentInfo():
 
@@ -34,6 +43,9 @@ class GameStateOpponentInfo():
         self.no_of_pokemon: int = self.team.get_team_size()
         self.current_move: m.Move
 
+    def reset_state(self):
+        self.team.reset_team()
+
 class GameStatePlayerInfo():
 
     def __init__(self):
@@ -41,6 +53,9 @@ class GameStatePlayerInfo():
         self.team: t.BattlingTeam = t.BattlingTeam(player=True)
         self.no_of_pokemon: int = self.team.get_team_size()
         self.current_move: m.Move
+    
+    def reset_state(self):
+        self.team.reset_team()
 
 class GameStateTurnInfo():
 
@@ -51,7 +66,8 @@ class GameStateTurnInfo():
 
         self.first_mover: str
 
-
+    def reset_state(self):
+        self.turn_number = 1
 
 
 

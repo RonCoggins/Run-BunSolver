@@ -11,6 +11,7 @@ import opponentaidecision as oAI
 import playeraidecision as pAI
 import decisiontree as dt
 import pokemon as p
+import gui
 
 class BattleEngine:
 
@@ -20,7 +21,7 @@ class BattleEngine:
 
         self.game_state: gs.GameState = gs.GameState(self.opponent_trainer)
 
-        self.start_game_loop()
+        #self.start_game_loop()
 
     def opponent_trainer_select(self) -> str:
 
@@ -28,30 +29,31 @@ class BattleEngine:
     
         return selected_trainer
     
-    @timeit_sync(runs=5, workers=2, log_level=logging.INFO)
-    def start_game_loop(self):
-        
-        while self.game_state.battle_over == False:
+    @timeit_sync(runs=1, workers=2, log_level=logging.INFO)
+    def run_one_turn(self):
             
-            print(f"Turn Number: {self.game_state.turn_info.turn_number}\n")
+        print(f"Turn Number: {self.game_state.turn_info.turn_number}\n")
 
-            print(
-                f"\tPokemon on the field:\n \t\tPlayer: {self.game_state.player_info.team.active_pokemon.pokemon_name.title()}\n\t\tOpponent: {self.game_state.opponent_info.team.active_pokemon.pokemon_name.title()}\n"
-            )
+        print(
+            f"\tPokemon on the field:\n \t\tPlayer: {self.game_state.player_info.team.active_pokemon.pokemon_name.title()}\n\t\tOpponent: {self.game_state.opponent_info.team.active_pokemon.pokemon_name.title()}\n"
+        )
 
-            self.move_selection()
+        self.move_selection()
 
-            self.determine_first_mover()
+        self.determine_first_mover()
 
-            self.perform_actions()
+        self.perform_actions()
 
-            print(f"End of turn HP values are: Player{self.game_state.player_info.team.active_pokemon.current_HP}\n End of turn HP values are: Opponent{self.game_state.opponent_info.team.active_pokemon.current_HP}\n")
+        print(f"End of turn HP values are: Player{self.game_state.player_info.team.active_pokemon.current_HP}\n End of turn HP values are: Opponent{self.game_state.opponent_info.team.active_pokemon.current_HP}\n")
 
-            self.end_turn_actions()
+        self.end_turn_actions()
 
-            self.game_state.turn_info.turn_number += 1
+        self.game_state.turn_info.turn_number += 1
 
-       
+    def finish_battle(self):
+        while self.game_state.battle_over == False:
+            self.run_one_turn()
+        
 
     def move_selection(self) -> None:
         self.player_select_move()
@@ -131,7 +133,8 @@ class BattleEngine:
         if game_over:
             print(f"Winner is {self.game_state.winner}")
         
-
+    def reset_battle(self):
+        self.game_state.reset_state()
 
 
     
