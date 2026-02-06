@@ -3,6 +3,7 @@ import logging
 from timeit_decorator import timeit_sync
 
 import battle_engine as be
+import gui
 
 
 logging.basicConfig(
@@ -11,8 +12,8 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S"
 )
 
-@timeit_sync(runs=5, workers=2, detailed=True)
 def main():
+    gui.GUI()
     be.BattleEngine()
 
     
