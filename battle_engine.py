@@ -11,7 +11,6 @@ import opponentaidecision as oAI
 import playeraidecision as pAI
 import decisiontree as dt
 import pokemon as p
-import gui
 
 class BattleEngine:
 
