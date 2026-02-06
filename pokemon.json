@@ -1,0 +1,325 @@
+{
+    "meowth-galar": {
+        "ability": "tough-claws",
+        "level": 25,
+        "nature": "serious",
+        "ivs": {
+            "hp": 23,
+            "atk": 0,
+            "def": 22,
+            "spa": 0,
+            "spd": 1,
+            "spe": 7
+        },
+        "moveset": {
+            "move1": "night-slash",
+            "move2": "slash",
+            "move3": "fake-out",
+            "move4": "metal-claw"
+        }
+    },
+    "huntail": {
+        "ability": "swift-swim",
+        "level": 25,
+        "nature": "quirky",
+        "ivs": {
+            "hp": 13,
+            "atk": 23,
+            "def": 8,
+            "spa": 30,
+            "spd": 13,
+            "spe": 9
+        },
+        "moveset": {
+            "move1": "ice-fang",
+            "move2": "razor-shell",
+            "move3": "brine",
+            "move4": "bite"
+        }
+    },
+    "hariyama": {
+        "ability": "thick-fat",
+        "level": 25,
+        "nature": "quiet",
+        "ivs": {
+            "hp": 19,
+            "atk": 31,
+            "def": 11,
+            "spa": 26,
+            "spd": 1,
+            "spe": 7
+        },
+        "moveset": {
+            "move1": "vital-throw",
+            "move2": "payback",
+            "move3": "fake-out",
+            "move4": "force-palm"
+        }
+    },
+    "lopunny": {
+        "ability": "limber",
+        "level": 25,
+        "nature": "modest",
+        "ivs": {
+            "hp": 29,
+            "atk": 21,
+            "def": 23,
+            "spa": 1,
+            "spd": 22,
+            "spe": 16
+        },
+        "moveset": {
+            "move1": "quick-attack",
+            "move2": "covet",
+            "move3": "dizzy-punch",
+            "move4": "jump-kick"
+        }
+    },
+    "carvanha": {
+        "ability": "rough-skin",
+        "level": 25,
+        "nature": "serious",
+        "ivs": {
+            "hp": 26,
+            "atk": 8,
+            "def": 17,
+            "spa": 16,
+            "spd": 13,
+            "spe": 4
+        },
+        "moveset": {
+            "move1": "ice-fang",
+            "move2": "assurance",
+            "move3": "poison-fang",
+            "move4": "aqua-jet"
+        }
+    },
+    "corphish": {
+        "ability": "shell-armor",
+        "level": 25,
+        "nature": "rash",
+        "ivs": {
+            "hp": 29,
+            "atk": 22,
+            "def": 11,
+            "spa": 7,
+            "spd": 8,
+            "spe": 7
+        },
+        "moveset": {
+            "move1": "bubble-beam",
+            "move2": "aerial-ace",
+            "move3": "knock-off",
+            "move4": "mud-shot"
+        }
+    },
+    "pancham": {
+        "ability": "iron-fist",
+        "level": 25,
+        "nature": "careful",
+        "ivs": {
+            "hp": 21,
+            "atk": 5,
+            "def": 29,
+            "spa": 18,
+            "spd": 17,
+            "spe": 3
+        },
+        "moveset": {
+            "move1": "karate-chop",
+            "move2": "bullet-punch",
+            "move3": "circle-throw",
+            "move4": "feint-attack"
+        }
+    },
+    "sandshrew-alola": {
+        "ability": "slush-rush",
+        "level": 25,
+        "nature": "lax",
+        "ivs": {
+            "hp": 10,
+            "atk": 15,
+            "def": 19,
+            "spa": 12,
+            "spd": 25,
+            "spe": 30
+        },
+        "moveset": {
+            "move1": "slash",
+            "move2": "ice-punch",
+            "move3": "super-fang",
+            "move4": "ice-shard"
+        }
+    },
+    "eldegoss": {
+        "ability": "cotton-down",
+        "level": 25,
+        "nature": "careful",
+        "ivs": {
+            "hp": 17,
+            "atk": 28,
+            "def": 17,
+            "spa": 21,
+            "spd": 24,
+            "spe": 26
+        },
+        "moveset": {
+            "move1": "magical-leaf",
+            "move2": "cotton-spore",
+            "move3": "rapid-spin",
+            "move4": "synthesis"
+        }
+    },
+    "staravia": {
+        "ability": "intimidate",
+        "level": 25,
+        "nature": "relaxed",
+        "ivs": {
+            "hp": 29,
+            "atk": 30,
+            "def": 4,
+            "spa": 20,
+            "spd": 0,
+            "spe": 11
+        },
+        "moveset": {
+            "move1": "endeavor",
+            "move2": "whirlwind",
+            "move3": "quick-attack",
+            "move4": "aerial-ace"
+        }
+    },
+    "yanmega": {
+        "ability": "tinted-lens",
+        "level": 25,
+        "nature": "jolly",
+        "ivs": {
+            "hp": 4,
+            "atk": 13,
+            "def": 21,
+            "spa": 7,
+            "spd": 0,
+            "spe": 3
+        },
+        "moveset": {
+            "move1": "detect",
+            "move2": "silver-wind",
+            "move3": "air-cutter",
+            "move4": "quick-attack"
+        }
+    },
+    "palpitoad": {
+        "ability": "swift-swim",
+        "level": 25,
+        "nature": "calm",
+        "ivs": {
+            "hp": 17,
+            "atk": 17,
+            "def": 1,
+            "spa": 29,
+            "spd": 22,
+            "spe": 30
+        },
+        "moveset": {
+            "move1": "bubble-beam",
+            "move2": "muddy-water",
+            "move3": "mud-shot",
+            "move4": "echoed-voice"
+        }
+    },
+    "breloom": {
+        "ability": "poison-heal",
+        "level": 25,
+        "nature": "impish",
+        "ivs": {
+            "hp": 11,
+            "atk": 9,
+            "def": 9,
+            "spa": 28,
+            "spd": 10,
+            "spe": 1
+        },
+        "moveset": {
+            "move1": "mach-punch",
+            "move2": "stun-spore",
+            "move3": "fake-tears",
+            "move4": "worry-seed"
+        }
+    },
+    "octillery": {
+        "ability": "suction-cups",
+        "level": 25,
+        "nature": "quirky",
+        "ivs": {
+            "hp": 7,
+            "atk": 8,
+            "def": 20,
+            "spa": 2,
+            "spd": 10,
+            "spe": 12
+        },
+        "moveset": {
+            "move1": "octazooka",
+            "move2": "lock-on",
+            "move3": "psybeam",
+            "move4": "aurora-beam"
+        }
+    },
+    "prinplup": {
+        "ability": "clear-body",
+        "level": 25,
+        "nature": "quiet",
+        "ivs": {
+            "hp": 22,
+            "atk": 5,
+            "def": 30,
+            "spa": 31,
+            "spd": 31,
+            "spe": 31
+        },
+        "moveset": {
+            "move1": "metal-claw",
+            "move2": "aqua-jet",
+            "move3": "bubble-beam",
+            "move4": "life-dew"
+        }
+    },
+    "drednaw": {
+        "ability": "strong-jaw",
+        "level": 25,
+        "nature": "hasty",
+        "ivs": {
+            "hp": 23,
+            "atk": 17,
+            "def": 24,
+            "spa": 26,
+            "spd": 30,
+            "spe": 5
+        },
+        "moveset": {
+            "move1": "headbutt",
+            "move2": "water-pulse",
+            "move3": "rock-tomb",
+            "move4": "ice-fang"
+        }
+    },
+    "ponyta": {
+        "ability": "flame-body",
+        "level": 25,
+        "nature": "rash",
+        "ivs": {
+            "hp": 14,
+            "atk": 4,
+            "def": 20,
+            "spa": 29,
+            "spd": 4,
+            "spe": 28
+        },
+        "moveset": {
+            "move1": "bounce",
+            "move2": "stomp",
+            "move3": "flame-wheel",
+            "move4": "ember"
+        }
+    }
+}

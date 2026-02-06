@@ -1,0 +1,170 @@
+Staravia @ Chesto Berry
+Ability: Intimidate
+Level: 25
+Relaxed Nature
+IVs: 29 HP / 30 Atk / 4 Def / 20 SpA / 0 SpD / 11 Spe
+- Endeavor
+- Whirlwind
+- Quick Attack
+- Aerial Ace
+
+Meowth-Galar
+Ability: Tough Claws
+Level: 25
+Serious Nature
+IVs: 23 HP / 0 Atk / 22 Def / 0 SpA / 1 SpD / 7 Spe
+- Night Slash
+- Slash
+- Fake Out
+- Metal Claw
+
+Huntail
+Ability: Swift Swim
+Level: 25
+Quirky Nature
+IVs: 13 HP / 23 Atk / 8 Def / 30 SpA / 13 SpD / 9 Spe
+- Ice Fang
+- Razor Shell
+- Brine
+- Bite
+
+Hariyama
+Ability: Thick Fat
+Level: 25
+Quiet Nature
+IVs: 19 HP / 31 Atk / 11 Def / 26 SpA / 1 SpD / 7 Spe
+- Vital Throw
+- Payback
+- Fake Out
+- Force Palm
+
+Yanmega @ Oran Berry
+Ability: Tinted Lens
+Level: 25
+Jolly Nature
+IVs: 4 HP / 13 Atk / 21 Def / 7 SpA / 0 SpD / 3 Spe
+- Detect
+- Silver Wind
+- Air Cutter
+- Quick Attack
+
+Lopunny
+Ability: Limber
+Level: 25
+Modest Nature
+IVs: 29 HP / 21 Atk / 23 Def / 1 SpA / 22 SpD / 16 Spe
+- Quick Attack
+- Covet
+- Dizzy Punch
+- Jump Kick
+
+Carvanha
+Ability: Rough Skin
+Level: 25
+Serious Nature
+IVs: 26 HP / 8 Atk / 17 Def / 16 SpA / 13 SpD / 4 Spe
+- Ice Fang
+- Assurance
+- Poison Fang
+- Aqua Jet
+
+Palpitoad @ Oran Berry
+Ability: Swift Swim
+Level: 25
+Calm Nature
+IVs: 17 HP / 17 Atk / 1 Def / 29 SpA / 22 SpD / 30 Spe
+- Bubble Beam
+- Muddy Water
+- Mud Shot
+- Echoed Voice
+
+Breloom @ Oran Berry
+Ability: Poison Heal
+Level: 25
+Impish Nature
+IVs: 11 HP / 9 Atk / 9 Def / 28 SpA / 10 SpD / 1 Spe
+- Mach Punch
+- Stun Spore
+- Fake Tears
+- Worry Seed
+
+Octillery @ Pecha Berry
+Ability: Suction Cups
+Level: 25
+Quirky Nature
+IVs: 7 HP / 8 Atk / 20 Def / 2 SpA / 10 SpD / 12 Spe
+- Octazooka
+- Lock-On
+- Psybeam
+- Aurora Beam
+
+Corphish
+Ability: Shell Armor
+Level: 25
+Rash Nature
+IVs: 29 HP / 22 Atk / 11 Def / 7 SpA / 8 SpD / 7 Spe
+- Bubble Beam
+- Aerial Ace
+- Knock Off
+- Mud Shot
+
+Prinplup @ Oran Berry
+Ability: Clear Body
+Level: 25
+Quiet Nature
+IVs: 22 HP / 5 Atk / 30 Def / 31 SpA / 31 SpD / 31 Spe
+- Metal Claw
+- Aqua Jet
+- Bubble Beam
+- Life Dew
+
+Pancham
+Ability: Iron Fist
+Level: 25
+Careful Nature
+IVs: 21 HP / 5 Atk / 29 Def / 18 SpA / 17 SpD / 3 Spe
+- Karate Chop
+- Bullet Punch
+- Circle Throw
+- Feint Attack
+
+Drednaw @ Oran Berry
+Ability: Strong Jaw
+Level: 25
+Hasty Nature
+IVs: 23 HP / 17 Atk / 24 Def / 26 SpA / 30 SpD / 5 Spe
+- Headbutt
+- Water Pulse
+- Rock Tomb
+- Ice Fang
+
+Sandshrew-Alola
+Ability: Slush Rush
+Level: 25
+Lax Nature
+IVs: 10 HP / 15 Atk / 19 Def / 12 SpA / 25 SpD / 30 Spe
+- Slash
+- Ice Punch
+- Super Fang
+- Ice Shard
+
+Ponyta @ Pecha Berry
+Ability: Flame Body
+Level: 25
+Rash Nature
+IVs: 14 HP / 4 Atk / 20 Def / 29 SpA / 4 SpD / 28 Spe
+- Bounce
+- Stomp
+- Flame Wheel
+- Ember
+
+Eldegoss
+Ability: Cotton Down
+Level: 25
+Careful Nature
+IVs: 17 HP / 28 Atk / 17 Def / 21 SpA / 24 SpD / 26 Spe
+- Magical Leaf
+- Cotton Spore
+- Rapid Spin
+- Synthesis
+
