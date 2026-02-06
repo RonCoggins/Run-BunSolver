@@ -77,9 +77,13 @@ class GUI:
         tk.Label(stats_display_frame, textvariable=self.player_pokemon_remaining_var,wraplength=100,justify="left").grid(row=2,column=2)
         
         self.available_trainers = self.create_available_trainers_list(stats_display_frame)
-        self.available_trainers.grid()
+        self.available_trainers.grid(row=5, column=2)
 
+        self.opponent_pokemon_remaining_var = tk.StringVar()
+        self.opponent_pokemon_remaining_var.set(str(self.battle_engine.game_state.opponent_info.team.team))
+        tk.Label(stats_display_frame, textvariable=self.opponent_pokemon_remaining_var,wraplength=100,justify="left").grid(row=3,column=2)
 
+        self.update_opponent_pictures():
         
 
         root.mainloop()
@@ -110,7 +114,12 @@ class GUI:
         selection = event.widget.curselection()
         selection = selection[0]
         selected_trainer = list(opponenttrainers.opponent_trainers.keys())[selection]
-        print(selected_trainer)
+        self.update_opponent_pokemon(selected_trainer)
+        
+
+    def update_opponent_pokemon(self, selected_trainer):
+        opponent_team = t.BattlingTeam(False,selected_trainer)
+        self.opponent_pokemon_remaining_var.set(str(opponent_team.team))
 
         
 
