@@ -1,5 +1,7 @@
 import tkinter as tk
+from tkinter import ttk
 from pathlib import Path
+from functools import cache
 
 import team as t
 import pokemon as p
@@ -24,37 +26,26 @@ class GUI:
         main_frame = tk.Frame(root)
         main_frame.grid()
 
-        player_team_frame = tk.Frame(
+        self.player_team_frame = tk.Frame(
             main_frame, highlightthickness=1, highlightbackground="Black"
         )
 
-        opponent_team_frame = tk.Frame(
+        self.opponent_team_frame = tk.Frame(
             main_frame, highlightthickness=1, highlightbackground="Black"
         )
 
         player_team_frame_column = 0
         opponent_team_frame_column = 1
 
-        player_team_frame.grid(row=0, column=player_team_frame_column, padx=50)
-        opponent_team_frame.grid(row=0, column=opponent_team_frame_column, padx=50)
+        self.player_team_frame.grid(row=0, column=player_team_frame_column, padx=50)
+        self.opponent_team_frame.grid(row=0, column=opponent_team_frame_column, padx=50)
 
-        player_team_label = tk.Label(player_team_frame, text="Player Team")
-        player_team_label.grid(column=0,row=1)
+        
 
-        self.player_pokemon_image: tk.PhotoImage
-        self.player_pokemon_image0 = tk.Label(player_team_frame)
-        self.player_pokemon_image1 = tk.Label(player_team_frame)
-        self.player_pokemon_image2 = tk.Label(player_team_frame)
-        self.player_pokemon_image3 = tk.Label(player_team_frame)
-        self.player_pokemon_image4 = tk.Label(player_team_frame)
-        self.player_pokemon_image5 = tk.Label(player_team_frame)
-        self.player_pokemon_image0.grid(column=0,row=2)
-        self.player_pokemon_image1.grid(column=1,row=2)
-        self.player_pokemon_image2.grid(column=2,row=2)
-        self.player_pokemon_image3.grid(column=0,row=3)
-        self.player_pokemon_image4.grid(column=1,row=3)
-        self.player_pokemon_image5.grid(column=2,row=3)
-        self.load_player_pokemon_png()
+        self.create_player_pokemon_team()
+        self.create_available_trainers_list(self.opponent_team_frame)
+        
+        
 
 
         stats_display_frame = tk.Frame(
@@ -137,32 +128,82 @@ class GUI:
 
     #     self.player_pokemon_remaining_var.set(str(self.battle_engine.game_state.player_info.team.team))
 
-    # def create_available_trainers_list(self,parent_frame: tk.Frame):
-    #     available_trainers = list(opponenttrainers.opponent_trainers.keys())
-    #     list_variable = tk.Variable(value=available_trainers)
-    #     listbox = tk.Listbox(parent_frame, listvariable=list_variable)
-    #     listbox.bind("<<ListboxSelect>>", self.update_trainer_selection)
-    #     return listbox
+    def create_available_trainers_list(self,parent_frame: tk.Frame):
+        available_trainers = list(opponenttrainers.opponent_trainers.keys())
+        self.trainers_combobox = ttk.Combobox(parent_frame, values=available_trainers)
+        self.trainers_combobox.set("Select Opponent Trainer")
+        self.trainers_combobox.grid(column=1,row=0)
+        self.trainers_combobox.bind("<<ComboboxSelected>>", self.create_trainer_team)
     
-    # def update_trainer_selection(self, event):
-    #     #this loooks horrible, curselection was returning a tuple so work around
-    #     selection = event.widget.curselection()
-    #     selection = selection[0]
-    #     selected_trainer = list(opponenttrainers.opponent_trainers.keys())[selection]
-    #     self.update_opponent_pokemon(selected_trainer)
+    @cache
+    def create_trainer_team(self, event):
+        
+        trainer_selection = self.trainers_combobox.get()
+        trainer_team = t.BattlingTeam(False, trainer_selection)
         
 
-    # def update_opponent_pokemon(self, selected_trainer):
-    #     opponent_team = t.BattlingTeam(False,selected_trainer)
-    #     self.opponent_pokemon_remaining_var.set(str(opponent_team.team))
-    #     self.update_opponent_pokemon_image(opponent_team)
+        self.opponent_pokemon_image0 = tk.Label(self.opponent_team_frame)
+        self.opponent_pokemon_image1 = tk.Label(self.opponent_team_frame)
+        self.opponent_pokemon_image2 = tk.Label(self.opponent_team_frame)
+        self.opponent_pokemon_image3 = tk.Label(self.opponent_team_frame)
+        self.opponent_pokemon_image4 = tk.Label(self.opponent_team_frame)
+        self.opponent_pokemon_image5 = tk.Label(self.opponent_team_frame)
+        self.opponent_pokemon_image0.grid(column=0,row=2)
+        self.opponent_pokemon_image1.grid(column=1,row=2)
+        self.opponent_pokemon_image2.grid(column=2,row=2)
+        self.opponent_pokemon_image3.grid(column=0,row=3)
+        self.opponent_pokemon_image4.grid(column=1,row=3)
+        self.opponent_pokemon_image5.grid(column=2,row=3)
+        self.load_opponent_pokemon_png(trainer_team)
     
-    # def update_opponent_pokemon_image(self, team: t.BattlingTeam):
-    #     first_pokemon = team.team["slot1"].pokemon_name.upper()
-    #     self.image_location = f"{PNG_DIRECTORY}/{first_pokemon}.png"
-    #     self.image = tk.PhotoImage(file=self.image_location,width=64)
-    #     self.pokemon_image['image'] = self.image
+    @cache
+    def load_opponent_pokemon_png(self, team: t.BattlingTeam):
+        opponent_team_pokemon_obj:list[p.BattlingPokemon] = list(team.team.values())
+        opponent_team_names: list[str] = [x.pokemon_name.upper() for x in opponent_team_pokemon_obj]
     
+        self.image_location0 = f"{PNG_DIRECTORY}/{opponent_team_names[0]}.png"
+        self.image0 = tk.PhotoImage(file=self.image_location0,width=64)
+        self.opponent_pokemon_image0['image'] = self.image0
+
+        self.image_location1 = f"{PNG_DIRECTORY}/{opponent_team_names[1]}.png"
+        self.image1 = tk.PhotoImage(file=self.image_location1,width=64)
+        self.opponent_pokemon_image1['image'] = self.image1
+
+        self.image_location2 = f"{PNG_DIRECTORY}/{opponent_team_names[2]}.png"
+        self.image2 = tk.PhotoImage(file=self.image_location2,width=64)
+        self.opponent_pokemon_image2['image'] = self.image2
+
+        self.image_location3 = f"{PNG_DIRECTORY}/{opponent_team_names[3]}.png"
+        self.image3 = tk.PhotoImage(file=self.image_location3,width=64)
+        self.opponent_pokemon_image3['image'] = self.image3
+
+        self.image_location4 = f"{PNG_DIRECTORY}/{opponent_team_names[4]}.png"
+        self.image4 = tk.PhotoImage(file=self.image_location4,width=64)
+        self.opponent_pokemon_image4['image'] = self.image4
+
+        self.image_location5 = f"{PNG_DIRECTORY}/{opponent_team_names[5]}.png"
+        self.image5 = tk.PhotoImage(file=self.image_location5,width=64)
+        self.opponent_pokemon_image5['image'] = self.image5
+    
+    def create_player_pokemon_team(self):
+
+        player_team_label = tk.Label(self.player_team_frame, text="Player Team")
+        player_team_label.grid(column=1,row=0)
+
+        self.player_pokemon_image0 = tk.Label(self.player_team_frame)
+        self.player_pokemon_image1 = tk.Label(self.player_team_frame)
+        self.player_pokemon_image2 = tk.Label(self.player_team_frame)
+        self.player_pokemon_image3 = tk.Label(self.player_team_frame)
+        self.player_pokemon_image4 = tk.Label(self.player_team_frame)
+        self.player_pokemon_image5 = tk.Label(self.player_team_frame)
+        self.player_pokemon_image0.grid(column=0,row=2)
+        self.player_pokemon_image1.grid(column=1,row=2)
+        self.player_pokemon_image2.grid(column=2,row=2)
+        self.player_pokemon_image3.grid(column=0,row=3)
+        self.player_pokemon_image4.grid(column=1,row=3)
+        self.player_pokemon_image5.grid(column=2,row=3)
+        self.load_player_pokemon_png()
+
     def load_player_pokemon_png(self):
         player_team_pokemon_obj:list[p.BattlingPokemon] = list(self.battle_engine.game_state.player_info.team.team.values())
         player_team_names: list[str] = [x.pokemon_name.upper() for x in player_team_pokemon_obj]
@@ -191,8 +232,7 @@ class GUI:
         self.image5 = tk.PhotoImage(file=self.image_location5,width=64)
         self.player_pokemon_image5['image'] = self.image5
 
-
-        
+    
 
 
     
