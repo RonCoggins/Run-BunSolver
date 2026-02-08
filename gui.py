@@ -144,8 +144,6 @@ class GUI:
         
         self.opponent_team_png_dict: dict[str,tk.Label] = {}
 
-        self.reset_opponent_pokemon_png()
-
         column = 0
         row = 2
         
@@ -159,15 +157,6 @@ class GUI:
                 row += 1
         
         self.load_opponent_pokemon_png()
-    
-    def reset_opponent_pokemon_png(self):
-
-        if self.first_load == True:
-            pass
-        else:
-            self.blank_image = tk.PhotoImage(width=64,height=64)
-            for index in range(5):
-                self.opponent_photo_image_obj[f"image{index}"] = self.blank_image
 
     def load_opponent_pokemon_png(self):
 
@@ -187,50 +176,36 @@ class GUI:
         player_team_label = tk.Label(self.player_team_frame, text="Player Team")
         player_team_label.grid(column=1,row=0)
 
-        self.player_pokemon_image0 = tk.Label(self.player_team_frame)
-        self.player_pokemon_image1 = tk.Label(self.player_team_frame)
-        self.player_pokemon_image2 = tk.Label(self.player_team_frame)
-        self.player_pokemon_image3 = tk.Label(self.player_team_frame)
-        self.player_pokemon_image4 = tk.Label(self.player_team_frame)
-        self.player_pokemon_image5 = tk.Label(self.player_team_frame)
-        self.player_pokemon_image0.grid(column=0,row=2)
-        self.player_pokemon_image1.grid(column=1,row=2)
-        self.player_pokemon_image2.grid(column=2,row=2)
-        self.player_pokemon_image3.grid(column=0,row=3)
-        self.player_pokemon_image4.grid(column=1,row=3)
-        self.player_pokemon_image5.grid(column=2,row=3)
+        player_team_pokemon_obj:list[p.BattlingPokemon] = list(self.battle_engine.game_state.player_info.team.team.values())
+        self.player_team_names: list[str] = [x.pokemon_name.upper() for x in player_team_pokemon_obj]
+
+        self.player_team_png_dict: dict[str,tk.Label] = {}
+
+        column = 0
+        row = 2
+        
+        for index in range(len(self.player_team_names)):
+            self.player_team_png_dict[f"image{index}"] = tk.Label(self.player_team_frame)
+            self.player_team_png_dict[f"image{index}"].grid(column=column,row=row)
+            if column < 2:
+                column += 1
+            else:
+                column = 0
+                row += 1
+
         self.load_player_pokemon_png()
 
     @cache
     def load_player_pokemon_png(self):
-        player_team_pokemon_obj:list[p.BattlingPokemon] = list(self.battle_engine.game_state.player_info.team.team.values())
-        player_team_names: list[str] = [x.pokemon_name.upper() for x in player_team_pokemon_obj]
     
-        self.player_image_location0 = f"{PNG_DIRECTORY}/{player_team_names[0]}.png"
-        self.player_image0 = tk.PhotoImage(file=self.player_image_location0,width=64)
-        self.player_pokemon_image0['image'] = self.player_image0
+        self.player_png_locations: dict[str, str] = {}
+        self.player_photo_image_obj: dict[str, tk.PhotoImage] = {}
 
-        self.player_image_location1 = f"{PNG_DIRECTORY}/{player_team_names[1]}.png"
-        self.player_image1 = tk.PhotoImage(file=self.player_image_location1,width=64)
-        self.player_pokemon_image1['image'] = self.player_image1
+        for index, pokemon_name in enumerate(self.player_team_names):
 
-        self.player_image_location2 = f"{PNG_DIRECTORY}/{player_team_names[2]}.png"
-        self.player_image2 = tk.PhotoImage(file=self.player_image_location2,width=64)
-        self.player_pokemon_image2['image'] = self.player_image2
-
-        self.player_image_location3 = f"{PNG_DIRECTORY}/{player_team_names[3]}.png"
-        self.player_image3 = tk.PhotoImage(file=self.player_image_location3,width=64)
-        self.player_pokemon_image3['image'] = self.player_image3
-
-        self.player_image_location4 = f"{PNG_DIRECTORY}/{player_team_names[4]}.png"
-        self.player_image4 = tk.PhotoImage(file=self.player_image_location4,width=64)
-        self.player_pokemon_image4['image'] = self.player_image4
-
-        self.player_image_location5 = f"{PNG_DIRECTORY}/{player_team_names[5]}.png"
-        self.player_image5 = tk.PhotoImage(file=self.player_image_location5,width=64)
-        self.player_pokemon_image5['image'] = self.player_image5
-
-    
+            self.player_png_locations[f"image{index}"] = f"{PNG_DIRECTORY}/{pokemon_name}.png"
+            self.player_photo_image_obj[f"image{index}"] = tk.PhotoImage(file=self.player_png_locations[f"image{index}"],width=64)
+            self.player_team_png_dict[f"image{index}"]["image"] = self.player_photo_image_obj[f"image{index}"]
 
 
     
