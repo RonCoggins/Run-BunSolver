@@ -19,37 +19,28 @@ class GUI:
         self.battle_engine = battle_engine
 
         root = tk.Tk()
-        height: int = 600
-        width: int = 600
+        height: int = 900
+        width: int = 900
         root.geometry(f"{height}x{width}")
+        root.resizable(False,False)
 
         self.first_load = True
 
         main_frame = tk.Frame(root)
         main_frame.grid()
 
-        self.player_team_frame = tk.Frame(
-            main_frame, highlightthickness=1, highlightbackground="Black"
-        )
+        self.player_team_frame = PlayerPokemonInfoFrame(main_frame, battle_engine=self.battle_engine)
+        self.opponent_team_frame = OpponentPokemonInfoFrame(main_frame, battle_engine=self.battle_engine)
 
-        self.opponent_team_frame = tk.Frame(
-            main_frame, highlightthickness=1, highlightbackground="Black"
-        )
+        self.player_team_frame.grid(row=0, column=0)
+        self.opponent_team_frame.grid(row=0, column=1)
 
-        player_team_frame_column = 0
-        opponent_team_frame_column = 1
-
-        self.player_team_frame.grid(row=0, column=player_team_frame_column)
-        self.opponent_team_frame.grid(row=0, column=opponent_team_frame_column)
-
-        self.player_team_frame.columnconfigure(1)
         self.player_team_frame.rowconfigure(1)
-
-        self.opponent_team_frame.columnconfigure(1)
         self.opponent_team_frame.rowconfigure(1)
 
-        self.create_player_pokemon_team()
-        self.create_available_trainers_list(self.opponent_team_frame)
+        self.player_team_frame.columnconfigure(1)
+        self.opponent_team_frame.columnconfigure(1)
+
 
         ### PLAYER POKEMON LIST BOX
 
@@ -126,15 +117,80 @@ class GUI:
 
     #     self.player_pokemon_remaining_var.set(str(self.battle_engine.game_state.player_info.team.team))
 
-    def create_available_trainers_list(self,parent_frame: tk.Frame):
+    
+
+    
+    
+
+
+    
+class PlayerPokemonInfoFrame(tk.Frame):
+    def __init__(self, parent_frame: tk.Frame, battle_engine: be.BattleEngine, starting_column=1,starting_row=0):
+        tk.Frame.__init__(self, parent_frame)
+   
+        self.parent_frame = parent_frame
+        self.battle_engine = battle_engine
+
+        
+
+        self.create_player_pokemon_team()
+
+
+    def create_player_pokemon_team(self):
+
+        self.player_team_label = tk.Label(self, text="Player Team")
+        self.player_team_label.grid(column=1,row=0)
+
+        player_team_pokemon_obj:list[p.BattlingPokemon] = list(self.battle_engine.game_state.player_info.team.team.values())
+        self.player_team_names: list[str] = [x.pokemon_name.upper() for x in player_team_pokemon_obj]
+
+        self.player_team_png_dict: dict[str,tk.Label] = {}
+
+        column = 0
+        row = 2
+        
+        for index in range(len(self.player_team_names)):
+            self.player_team_png_dict[f"image{index}"] = tk.Label(self)
+            self.player_team_png_dict[f"image{index}"].grid(column=column,row=row)
+            if column < 2:
+                column += 1
+            else:
+                column = 0
+                row += 1
+
+        self.load_player_pokemon_png()
+
+    def load_player_pokemon_png(self):
+    
+        self.player_png_locations: dict[str, str] = {}
+        self.player_photo_image_obj: dict[str, tk.PhotoImage] = {}
+
+        for index, pokemon_name in enumerate(self.player_team_names):
+
+            self.player_png_locations[f"image{index}"] = f"{PNG_DIRECTORY}/{pokemon_name}.png"
+            self.player_photo_image_obj[f"image{index}"] = tk.PhotoImage(file=self.player_png_locations[f"image{index}"],width=64)
+            self.player_team_png_dict[f"image{index}"]["image"] = self.player_photo_image_obj[f"image{index}"]
+    
+    
+
+class OpponentPokemonInfoFrame(tk.Frame):
+    def __init__(self, parent_frame: tk.Frame, battle_engine: be.BattleEngine):
+        tk.Frame.__init__(self, parent_frame)
+        self.parent_frame = parent_frame
+        self.battle_engine = battle_engine
+
+        
+
+        self.create_available_trainers_list()
+
+    def create_available_trainers_list(self):
         available_trainers = list(opponenttrainers.opponent_trainers.keys())
-        self.trainers_combobox = ttk.Combobox(parent_frame, values=available_trainers)
+        self.trainers_combobox = ttk.Combobox(self, values=available_trainers)
         self.trainers_combobox.set("Select Opponent Trainer")
         self.trainers_combobox.grid(column=1,row=0)
-        self.trainers_combobox.bind("<<ComboboxSelected>>", self.create_trainer_team)
-    
-    @cache
-    def create_trainer_team(self, event):
+        self.trainers_combobox.bind("<<ComboboxSelected>>", self.create_opponent_pokemon_team)
+
+    def create_opponent_pokemon_team(self, event):
 
         trainer_selection = self.trainers_combobox.get()
         trainer_team = t.BattlingTeam(False, trainer_selection)
@@ -148,7 +204,7 @@ class GUI:
         row = 2
         
         for index in range(len(self.opponent_team_names)):
-            self.opponent_team_png_dict[f"image{index}"] = tk.Label(self.opponent_team_frame)
+            self.opponent_team_png_dict[f"image{index}"] = tk.Label(self)
             self.opponent_team_png_dict[f"image{index}"].grid(column=column,row=row)
             if column < 2:
                 column += 1
@@ -160,6 +216,7 @@ class GUI:
 
     def load_opponent_pokemon_png(self):
 
+
         self.opponent_png_locations: dict[str, str] = {}
         self.opponent_photo_image_obj: dict[str, tk.PhotoImage] = {}
 
@@ -169,43 +226,3 @@ class GUI:
             self.opponent_png_locations[f"image{index}"] = f"{PNG_DIRECTORY}/{pokemon_name}.png"
             self.opponent_photo_image_obj[f"image{index}"] = tk.PhotoImage(file=self.opponent_png_locations[f"image{index}"],width=64)
             self.opponent_team_png_dict[f"image{index}"]["image"] = self.opponent_photo_image_obj[f"image{index}"]
-
-    
-    def create_player_pokemon_team(self):
-
-        player_team_label = tk.Label(self.player_team_frame, text="Player Team")
-        player_team_label.grid(column=1,row=0)
-
-        player_team_pokemon_obj:list[p.BattlingPokemon] = list(self.battle_engine.game_state.player_info.team.team.values())
-        self.player_team_names: list[str] = [x.pokemon_name.upper() for x in player_team_pokemon_obj]
-
-        self.player_team_png_dict: dict[str,tk.Label] = {}
-
-        column = 0
-        row = 2
-        
-        for index in range(len(self.player_team_names)):
-            self.player_team_png_dict[f"image{index}"] = tk.Label(self.player_team_frame)
-            self.player_team_png_dict[f"image{index}"].grid(column=column,row=row)
-            if column < 2:
-                column += 1
-            else:
-                column = 0
-                row += 1
-
-        self.load_player_pokemon_png()
-
-    @cache
-    def load_player_pokemon_png(self):
-    
-        self.player_png_locations: dict[str, str] = {}
-        self.player_photo_image_obj: dict[str, tk.PhotoImage] = {}
-
-        for index, pokemon_name in enumerate(self.player_team_names):
-
-            self.player_png_locations[f"image{index}"] = f"{PNG_DIRECTORY}/{pokemon_name}.png"
-            self.player_photo_image_obj[f"image{index}"] = tk.PhotoImage(file=self.player_png_locations[f"image{index}"],width=64)
-            self.player_team_png_dict[f"image{index}"]["image"] = self.player_photo_image_obj[f"image{index}"]
-
-
-    
