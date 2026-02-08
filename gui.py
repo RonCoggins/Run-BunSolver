@@ -37,21 +37,17 @@ class GUI:
         player_team_frame_column = 0
         opponent_team_frame_column = 1
 
-        self.player_team_frame.grid(row=0, column=player_team_frame_column, padx=50)
-        self.opponent_team_frame.grid(row=0, column=opponent_team_frame_column, padx=50)
+        self.player_team_frame.grid(row=0, column=player_team_frame_column)
+        self.opponent_team_frame.grid(row=0, column=opponent_team_frame_column)
 
-        
+        self.player_team_frame.columnconfigure(1)
+        self.player_team_frame.rowconfigure(1)
+
+        self.opponent_team_frame.columnconfigure(1)
+        self.opponent_team_frame.rowconfigure(1)
 
         self.create_player_pokemon_team()
         self.create_available_trainers_list(self.opponent_team_frame)
-        
-        
-
-
-        stats_display_frame = tk.Frame(
-            main_frame, highlightthickness=1, highlightbackground="Black"
-        )
-        stats_display_frame.grid(row=1, column=0, padx=50)
 
         ### PLAYER POKEMON LIST BOX
 
@@ -204,33 +200,34 @@ class GUI:
         self.player_pokemon_image5.grid(column=2,row=3)
         self.load_player_pokemon_png()
 
+    @cache
     def load_player_pokemon_png(self):
         player_team_pokemon_obj:list[p.BattlingPokemon] = list(self.battle_engine.game_state.player_info.team.team.values())
         player_team_names: list[str] = [x.pokemon_name.upper() for x in player_team_pokemon_obj]
     
-        self.image_location0 = f"{PNG_DIRECTORY}/{player_team_names[0]}.png"
-        self.image0 = tk.PhotoImage(file=self.image_location0,width=64)
-        self.player_pokemon_image0['image'] = self.image0
+        self.player_image_location0 = f"{PNG_DIRECTORY}/{player_team_names[0]}.png"
+        self.player_image0 = tk.PhotoImage(file=self.player_image_location0,width=64)
+        self.player_pokemon_image0['image'] = self.player_image0
 
-        self.image_location1 = f"{PNG_DIRECTORY}/{player_team_names[1]}.png"
-        self.image1 = tk.PhotoImage(file=self.image_location1,width=64)
-        self.player_pokemon_image1['image'] = self.image1
+        self.player_image_location1 = f"{PNG_DIRECTORY}/{player_team_names[1]}.png"
+        self.player_image1 = tk.PhotoImage(file=self.player_image_location1,width=64)
+        self.player_pokemon_image1['image'] = self.player_image1
 
-        self.image_location2 = f"{PNG_DIRECTORY}/{player_team_names[2]}.png"
-        self.image2 = tk.PhotoImage(file=self.image_location2,width=64)
-        self.player_pokemon_image2['image'] = self.image2
+        self.player_image_location2 = f"{PNG_DIRECTORY}/{player_team_names[2]}.png"
+        self.player_image2 = tk.PhotoImage(file=self.player_image_location2,width=64)
+        self.player_pokemon_image2['image'] = self.player_image2
 
-        self.image_location3 = f"{PNG_DIRECTORY}/{player_team_names[3]}.png"
-        self.image3 = tk.PhotoImage(file=self.image_location3,width=64)
-        self.player_pokemon_image3['image'] = self.image3
+        self.player_image_location3 = f"{PNG_DIRECTORY}/{player_team_names[3]}.png"
+        self.player_image3 = tk.PhotoImage(file=self.player_image_location3,width=64)
+        self.player_pokemon_image3['image'] = self.player_image3
 
-        self.image_location4 = f"{PNG_DIRECTORY}/{player_team_names[4]}.png"
-        self.image4 = tk.PhotoImage(file=self.image_location4,width=64)
-        self.player_pokemon_image4['image'] = self.image4
+        self.player_image_location4 = f"{PNG_DIRECTORY}/{player_team_names[4]}.png"
+        self.player_image4 = tk.PhotoImage(file=self.player_image_location4,width=64)
+        self.player_pokemon_image4['image'] = self.player_image4
 
-        self.image_location5 = f"{PNG_DIRECTORY}/{player_team_names[5]}.png"
-        self.image5 = tk.PhotoImage(file=self.image_location5,width=64)
-        self.player_pokemon_image5['image'] = self.image5
+        self.player_image_location5 = f"{PNG_DIRECTORY}/{player_team_names[5]}.png"
+        self.player_image5 = tk.PhotoImage(file=self.player_image_location5,width=64)
+        self.player_pokemon_image5['image'] = self.player_image5
 
     
 

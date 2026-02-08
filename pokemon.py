@@ -42,7 +42,7 @@ class UserPokemon(BasePokemon):
         self.nature = nature
         self.ability = ability
         self.item = item
-        print(ivs)
+        self.init_moveset = moveset
         self.ivs: dict[str, int] = {
             "hp": ivs[0],
             "atk": ivs[1],
@@ -52,12 +52,7 @@ class UserPokemon(BasePokemon):
             "spe": ivs[5],
         }
 
-        self.moveset = {
-            "move1": m.Move(moveset[0]),
-            "move2": m.Move(moveset[1]),
-            "move3": m.Move(moveset[2]),
-            "move4": m.Move(moveset[3]),
-        }
+        self.moveset = self.add_moveset()
 
         # Calculated Info
 
@@ -92,6 +87,18 @@ class UserPokemon(BasePokemon):
             calculation += (self.level + 10)
 
             return calculation
+
+    def add_moveset(self) -> dict[str, m.Move]:
+
+        moveset: dict[str, m.Move] = {}
+
+        for index, move_name in enumerate(self.init_moveset):
+            key_name = f"move{index+1}"
+            moveset[key_name] = m.Move(move_name)
+        
+        return moveset
+            
+
 
 class BattlingPokemon(UserPokemon):
     def __init__(self, pokemon: UserPokemon):
