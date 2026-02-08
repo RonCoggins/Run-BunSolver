@@ -1,4 +1,6 @@
 import tkinter as tk
+from pathlib import Path
+
 import team as t
 import pokemon as p
 import random
@@ -6,6 +8,7 @@ import game_state as gs
 import battle_engine as be
 import opponenttrainers
 
+PNG_DIRECTORY = Path('./png')
 
 
 class GUI:
@@ -83,7 +86,11 @@ class GUI:
         self.opponent_pokemon_remaining_var.set(str(self.battle_engine.game_state.opponent_info.team.team))
         tk.Label(stats_display_frame, textvariable=self.opponent_pokemon_remaining_var,wraplength=100,justify="left").grid(row=3,column=2)
 
-        self.update_opponent_pictures():
+        image_location = f"{PNG_DIRECTORY}/ZOROARK.png"
+
+        image = tk.PhotoImage(file=image_location)
+        self.pokemon_image: tk.Label = tk.Label(stats_display_frame, image=image)
+        self.pokemon_image.grid(column=1, row = 10)
         
 
         root.mainloop()
@@ -120,6 +127,15 @@ class GUI:
     def update_opponent_pokemon(self, selected_trainer):
         opponent_team = t.BattlingTeam(False,selected_trainer)
         self.opponent_pokemon_remaining_var.set(str(opponent_team.team))
+        self.update_opponent_pokemon_image(opponent_team)
+    
+    def update_opponent_pokemon_image(self, team: t.BattlingTeam):
+        first_pokemon = team.team["slot1"].pokemon_name.upper()
+        self.image_location = f"{PNG_DIRECTORY}/{first_pokemon}.png"
+        self.image = tk.PhotoImage(file=self.image_location,width=64)
+        self.pokemon_image['image'] = self.image
+
+
 
         
 
