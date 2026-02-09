@@ -35,6 +35,8 @@ class GUI:
         self.player_team_frame.grid(row=0, column=0)
         self.opponent_team_frame.grid(row=0, column=1)
 
+        self.player_team_frame["padx"] = 20
+
         self.player_team_frame.rowconfigure(1)
         self.opponent_team_frame.rowconfigure(1)
 
@@ -128,7 +130,9 @@ class PlayerPokemonInfoFrame(tk.Frame):
     def __init__(self, parent_frame: tk.Frame, battle_engine: be.BattleEngine):
         tk.Frame.__init__(self, parent_frame)
 
-        self.config(highlightbackground="black",highlightthickness=1)
+        self.config(highlightbackground="black",highlightthickness=1, padx=10)
+        self.config(height=400, width=400)
+        self.grid_propagate(False)
 
         self.first_load:bool  = True
 
@@ -189,8 +193,11 @@ class OpponentPokemonInfoFrame(tk.Frame):
     def __init__(self, parent_frame: tk.Frame, battle_engine: be.BattleEngine):
         tk.Frame.__init__(self, parent_frame)
 
-        self.config(highlightbackground="black",highlightthickness=1)
-        self.config(height=360, width=360)
+        self.config(highlightbackground="black",highlightthickness=1, padx=10)
+        self.config(height=400, width=400)
+        self.grid_propagate(False)
+
+        self.grid_propagate(False)
 
         self.parent_frame = parent_frame
         self.battle_engine = battle_engine
@@ -278,14 +285,17 @@ class PokemonStatInformationFrame(tk.Frame):
 
         self.pokemon_name = tk.Label(self, text=f"Name: {self.get_name()}")
         self.level = tk.Label(self, text=f"Lvl: {self.get_level()}")
+        self.hp = tk.Label(self, text=f"HP: {self.get_HP()}")
 
         self.stat_mapping: dict[str,int] = {
             "name": 0,
-            "lvl" : 1
+            "lvl" : 1,
+            "hp" : 2
         }
 
         self.pokemon_name.grid(row=self.stat_mapping["name"])
         self.level.grid(row=self.stat_mapping["lvl"])
+        self.hp.grid(row=self.stat_mapping["hp"])
     
     def get_name(self) -> str:
 
@@ -295,9 +305,9 @@ class PokemonStatInformationFrame(tk.Frame):
 
         return self.battling_pokemon_obj.level
 
-    def reset(self):
-        self.pokemon_name = ""
-        self.level = ""
+    def get_HP(self) -> int:
+
+        return self.battling_pokemon_obj.current_HP
 
 class BlankFrame(tk.Frame):
     def __init__(self, parent_frame: tk.Frame):
