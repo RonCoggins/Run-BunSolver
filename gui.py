@@ -26,14 +26,18 @@ class GUI:
         root.geometry(f"{height}x{width}")
         root.resizable(False,False)
 
+        self.battle_engine.init_game_state("Youngster Joey")
+
         main_frame = tk.Frame(root)
         main_frame.grid()
 
+        self.battle_frame = BattleFrame(main_frame, battle_engine=self.battle_engine)
+        self.opponent_team_frame = OpponentPokemonInfoFrame(main_frame, battle_engine=self.battle_engine,battle_frame=self.battle_frame)
         self.player_team_frame = PlayerPokemonInfoFrame(main_frame, battle_engine=self.battle_engine)
-        self.opponent_team_frame = OpponentPokemonInfoFrame(main_frame, battle_engine=self.battle_engine)
-
+        
         self.player_team_frame.grid(row=0, column=0)
         self.opponent_team_frame.grid(row=0, column=1)
+        self.battle_frame.grid(row=2)
 
         self.player_team_frame["padx"] = 20
 
@@ -48,10 +52,9 @@ class GUI:
 
         ### Start Battle Button
         
-    #     tk.Button(battle_frame, text="Start Battle", command=lambda: [self.battle_engine.run_one_turn(), self.update_labels()]).grid(row=4)
-    #     tk.Button(battle_frame, text="Simulate Full Battle", command=lambda: [self.battle_engine.finish_battle(), self.update_labels()]).grid(row=5)
-    #     tk.Button(battle_frame, text="Reset Battle", command=lambda: [self.battle_engine.reset_battle(), self.update_labels()]).grid(row=6)
+        
 
+        main_frame.rowconfigure(1)
 
     #     self.turn_var = tk.StringVar()
     #     self.turn_var.set("Turn Number: " + str(self.battle_engine.game_state.turn_info.turn_number)) 
@@ -96,12 +99,7 @@ class GUI:
     #     self.opponent_pokemon_remaining_var.set(str(self.battle_engine.game_state.opponent_info.team.team))
     #     tk.Label(stats_display_frame, textvariable=self.opponent_pokemon_remaining_var,wraplength=100,justify="left").grid(row=3,column=2)
 
-    #     image_location = f"{PNG_DIRECTORY}/ZOROARK.png"
 
-    #     image = tk.PhotoImage(file=image_location)
-    #     self.pokemon_image: tk.Label = tk.Label(stats_display_frame, image=image)
-    #     self.pokemon_image.grid(column=1, row = 10)
-        
 
         root.mainloop()
     
@@ -131,7 +129,7 @@ class PlayerPokemonInfoFrame(tk.Frame):
         tk.Frame.__init__(self, parent_frame)
 
         self.config(highlightbackground="black",highlightthickness=1, padx=10)
-        self.config(height=400, width=400)
+        self.config(height=500, width=400)
         self.grid_propagate(False)
 
         self.first_load:bool  = True
@@ -185,22 +183,21 @@ class PlayerPokemonInfoFrame(tk.Frame):
             self.player_png_locations[f"image{index}"] = f"{PNG_DIRECTORY}/{pokemon_name}.png"
             self.player_photo_image_obj[f"image{index}"] = tk.PhotoImage(file=self.player_png_locations[f"image{index}"],width=64)
             self.player_team_info_dict[f"image{index}"]["image"] = self.player_photo_image_obj[f"image{index}"]
-    
-    
 
 class OpponentPokemonInfoFrame(tk.Frame):
 
-    def __init__(self, parent_frame: tk.Frame, battle_engine: be.BattleEngine):
+    def __init__(self, parent_frame: tk.Frame, battle_engine: be.BattleEngine, battle_frame: tk.Frame):
         tk.Frame.__init__(self, parent_frame)
 
         self.config(highlightbackground="black",highlightthickness=1, padx=10)
-        self.config(height=400, width=400)
+        self.config(height=500, width=400)
         self.grid_propagate(False)
 
         self.grid_propagate(False)
 
         self.parent_frame = parent_frame
         self.battle_engine = battle_engine
+        self.battle_frame = battle_frame
 
         self.first_load:bool  = True
 
@@ -219,7 +216,10 @@ class OpponentPokemonInfoFrame(tk.Frame):
     def create_opponent_pokemon_team(self, event):
 
         trainer_selection = self.trainers_combobox.get()
+        self.battle_engine.init_game_state(trainer_selection)
         trainer_team = t.BattlingTeam(False, trainer_selection)
+
+        self.battle_frame.update_info()
 
         opponent_team_pokemon_obj:list[p.BattlingPokemon] = list(trainer_team.team.values())
         self.opponent_team_names: list[str] = [x.pokemon_name.upper() for x in opponent_team_pokemon_obj]
@@ -230,9 +230,9 @@ class OpponentPokemonInfoFrame(tk.Frame):
         self.destroy_existing_frames()
 
         for index in range(6):
-            print(index)
+            
             if index < len(self.opponent_team_names):
-                print("setting picture")
+                
                 self.opponent_team_info_dict[f"image{index}"] = tk.Label(self)
 
                 self.stat_frame_dict[f"infoframe{index}"] = PokemonStatInformationFrame(self, opponent_team_pokemon_obj[index])
@@ -241,7 +241,7 @@ class OpponentPokemonInfoFrame(tk.Frame):
                 self.opponent_team_info_dict[f"image{index}"].grid(column=column,row=row) 
                 self.stat_frame_dict[f"infoframe{index}"].grid(column=column+1,row=row)
             else:
-                print("setting blank")
+                
                 self.opponent_team_info_dict[f"image{index}"] = tk.Label(self)
                 self.stat_frame_dict[f"infoframe{index}"] = BlankFrame(self)
                 self.opponent_team_info_dict[f"image{index}"].grid(column=column,row=row)
@@ -325,12 +325,98 @@ class PokemonStatInformationFrame(tk.Frame):
         
         return formatted_string
 
-        
-
-
-
 class BlankFrame(tk.Frame):
     def __init__(self, parent_frame: tk.Frame):
         tk.Frame.__init__(self, parent_frame)
 
         self.config(height=64, width=64)
+
+class BattleFrame(tk.Frame):
+    def __init__(self, parent_frame,battle_engine: be.BattleEngine):
+        tk.Frame.__init__(self, parent_frame)
+        self.battle_engine = battle_engine
+        self.game_state = battle_engine.game_state
+
+        self.active_pokemon = {}
+        
+        self.active_pokemon_data = {"player": {},
+                                    "opponent": {}}
+
+        self.add_buttons()
+        self.add_headers()
+        self.update_info()
+
+    def add_buttons(self):
+
+        tk.Button(self, text="Start Battle", command=lambda: [self.battle_engine.run_one_turn(), self.update_info()]).grid(row=1, column =1)
+        tk.Button(self, text="Simulate Full Battle", command=lambda: [self.battle_engine.finish_battle(), self.update_info()]).grid(row=1, column =2)
+        tk.Button(self, text="Reset Battle", command=lambda: [self.battle_engine.reset_battle(), self.update_info()]).grid(row=1, column =3)
+
+    def add_headers(self):
+        
+        self.headers = {"pos1": "Active Pokemon",
+                        "pos2": "Current HP",
+                        "pos3": "Move Used Last",
+                        "pos4": "Damage Dealt"}
+        
+        self.headers_labels = {}
+        
+        column = 0
+
+        for key, value in self.headers.items():
+            self.headers_labels[key] = tk.Label(self, text= value)
+            self.headers_labels[key].grid(row=2, column = column)
+            column += 1
+
+    def update_info(self):
+
+        self.active_pokemon: dict[str,str] = {"player": self.battle_engine.game_state.player_info.team.active_pokemon.pokemon_name,
+                                         "opponent": self.battle_engine.game_state.opponent_info.team.active_pokemon.pokemon_name}
+        
+        self.update_header_info()
+        self.update_active_pokemon_png()
+
+    def update_header_info(self):
+
+        self.header_info = {}
+
+        for key in self.active_pokemon:
+            self.header_info[key]["stringvar"]
+
+
+    # def destroy_old_labels(self):
+
+    #     for key, value in self.active_pokemon_data.items():
+    #         print(self.active_pokemon_data[key])
+            
+
+
+
+
+
+    def update_active_pokemon_png(self):
+        
+        
+
+        self.active_pokemon_data = {"player": {},
+                                    "opponent": {}}
+
+        print(self.active_pokemon)
+
+        for key, value in self.active_pokemon.items():
+            png_location = f"{PNG_DIRECTORY}/{value.upper()}.png"
+            print(png_location)
+            self.active_pokemon_data[key]["photo_image_obj"] = tk.PhotoImage(file=png_location,height=64,width=64)
+            self.active_pokemon_data[key]["png_label"] = tk.Label(self, image=self.active_pokemon_data[key]["photo_image_obj"])
+
+            if key == "player":
+                self.active_pokemon_data[key]["png_label"].grid(row=3, column=0)
+            else:
+                self.active_pokemon_data[key]["png_label"].grid(row=4, column=0)
+
+
+            
+        
+        
+
+    

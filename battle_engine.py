@@ -16,21 +16,14 @@ class BattleEngine:
 
     def __init__(self):
 
-        self.opponent_trainer: str = self.opponent_trainer_select()
-
-        self.game_state: gs.GameState = gs.GameState(self.opponent_trainer)
-
-        #self.start_game_loop()
-
-    def opponent_trainer_select(self) -> str:
-
-        selected_trainer: str = "Youngster Tommy"  # input("Select a trainer to battle:")
+        self.game_state: gs.GameState
     
-        return selected_trainer
+    def init_game_state(self, opponent_trainer):
+        self.game_state = gs.GameState(opponent_trainer)
+        print("called")
     
-    @timeit_sync(runs=1, workers=2, log_level=logging.INFO)
     def run_one_turn(self):
-            
+        
         print(f"Turn Number: {self.game_state.turn_info.turn_number}\n")
 
         print(
