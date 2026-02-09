@@ -147,7 +147,7 @@ class PlayerPokemonInfoFrame(tk.Frame):
         self.player_team_names: list[str] = [x.pokemon_name.upper() for x in player_team_pokemon_obj]
 
         self.player_team_info_dict: dict[str,tk.Label] = {}
-
+                                                          
         self.stat_frame_dict: dict[str,tk.Frame] = {}
 
         column = 0
@@ -190,6 +190,8 @@ class OpponentPokemonInfoFrame(tk.Frame):
         tk.Frame.__init__(self, parent_frame)
 
         self.config(highlightbackground="black",highlightthickness=1)
+        self.config(height=360, width=360)
+
         self.parent_frame = parent_frame
         self.battle_engine = battle_engine
 
@@ -220,23 +222,30 @@ class OpponentPokemonInfoFrame(tk.Frame):
 
         self.destroy_existing_frames()
 
-        for index in range(len(self.opponent_team_names)):
+        for index in range(6):
+            print(index)
+            if index < len(self.opponent_team_names):
+                print("setting picture")
+                self.opponent_team_info_dict[f"image{index}"] = tk.Label(self)
 
-            self.opponent_team_info_dict[f"image{index}"] = tk.Label(self)
+                self.stat_frame_dict[f"infoframe{index}"] = PokemonStatInformationFrame(self, opponent_team_pokemon_obj[index])
+                self.stat_frame_dict[f"infoframe{index}"].config(height=64,width=64)
 
-            self.stat_frame_dict[f"infoframe{index}"] = PokemonStatInformationFrame(self, opponent_team_pokemon_obj[index])
-            self.stat_frame_dict[f"infoframe{index}"].config(height=64,width=64)
+                self.opponent_team_info_dict[f"image{index}"].grid(column=column,row=row) 
+                self.stat_frame_dict[f"infoframe{index}"].grid(column=column+1,row=row)
+            else:
+                print("setting blank")
+                self.opponent_team_info_dict[f"image{index}"] = tk.Label(self)
+                self.stat_frame_dict[f"infoframe{index}"] = BlankFrame(self)
+                self.opponent_team_info_dict[f"image{index}"].grid(column=column,row=row)
+                self.stat_frame_dict[f"infoframe{index}"].grid(column=column+1,row=row)
 
-            self.opponent_team_info_dict[f"image{index}"].grid(column=column,row=row) 
-            self.stat_frame_dict[f"infoframe{index}"].grid(column=column+1,row=row)
 
             if column < 2:
                 column += 2
             else:
                 column = 0
                 row += 1
-        
-        self.first_load = False
         
         self.load_opponent_pokemon_png()
 
@@ -257,6 +266,9 @@ class OpponentPokemonInfoFrame(tk.Frame):
 
         for key in self.stat_frame_dict.keys():
             self.stat_frame_dict[key].destroy()
+        for key in self.opponent_team_info_dict.keys():
+            self.opponent_team_info_dict[key].destroy()
+
 class PokemonStatInformationFrame(tk.Frame):
     def __init__(self, parent_frame: tk.Frame, battling_pokemon_obj: p.BattlingPokemon):
         tk.Frame.__init__(self, parent_frame)
@@ -291,4 +303,4 @@ class BlankFrame(tk.Frame):
     def __init__(self, parent_frame: tk.Frame):
         tk.Frame.__init__(self, parent_frame)
 
-        self.config(height=64, width=64, background="black")
+        self.config(height=64, width=64)
