@@ -18,6 +18,8 @@ class GUI:
 
         self.battle_engine = battle_engine
 
+        
+
         root = tk.Tk()
         height: int = 900
         width: int = 900
@@ -125,7 +127,11 @@ class GUI:
 class PlayerPokemonInfoFrame(tk.Frame):
     def __init__(self, parent_frame: tk.Frame, battle_engine: be.BattleEngine):
         tk.Frame.__init__(self, parent_frame)
-   
+
+        self.config(highlightbackground="black",highlightthickness=1)
+
+        self.first_load:bool  = True
+
         self.parent_frame = parent_frame
         self.battle_engine = battle_engine
 
@@ -182,11 +188,15 @@ class OpponentPokemonInfoFrame(tk.Frame):
 
     def __init__(self, parent_frame: tk.Frame, battle_engine: be.BattleEngine):
         tk.Frame.__init__(self, parent_frame)
-        self.config(background="blue")
+
+        self.config(highlightbackground="black",highlightthickness=1)
         self.parent_frame = parent_frame
         self.battle_engine = battle_engine
 
-        
+        self.first_load:bool  = True
+
+        self.opponent_team_info_dict: dict[str,tk.Label] = {}
+        self.stat_frame_dict: dict[str,tk.Frame] = {}
 
         self.create_available_trainers_list()
 
@@ -205,28 +215,31 @@ class OpponentPokemonInfoFrame(tk.Frame):
         opponent_team_pokemon_obj:list[p.BattlingPokemon] = list(trainer_team.team.values())
         self.opponent_team_names: list[str] = [x.pokemon_name.upper() for x in opponent_team_pokemon_obj]
 
-        self.refresh_frames()
-        
-        self.opponent_team_info_dict: dict[str,tk.Label] = {}
-
-        self.stat_frame_dict: dict[str,tk.Frame] = {}
-
         column = 0
         row = 2
-        
+
+        self.destroy_existing_frames()
+
         for index in range(len(self.opponent_team_names)):
 
             self.opponent_team_info_dict[f"image{index}"] = tk.Label(self)
+
+            if self.first_load == False:
+                self.stat_frame_dict[f"infoframe{index}"].destroy()
+
             self.stat_frame_dict[f"infoframe{index}"] = PokemonStatInformationFrame(self, opponent_team_pokemon_obj[index])
             self.stat_frame_dict[f"infoframe{index}"].config(height=64,width=64)
 
             self.opponent_team_info_dict[f"image{index}"].grid(column=column,row=row) 
             self.stat_frame_dict[f"infoframe{index}"].grid(column=column+1,row=row)
+
             if column < 2:
-                column += 1
+                column += 2
             else:
                 column = 0
                 row += 1
+        
+        self.first_load = False
         
         self.load_opponent_pokemon_png()
 
@@ -243,28 +256,15 @@ class OpponentPokemonInfoFrame(tk.Frame):
             self.opponent_photo_image_obj[f"image{index}"] = tk.PhotoImage(file=self.opponent_png_locations[f"image{index}"],width=64)
             self.opponent_team_info_dict[f"image{index}"]["image"] = self.opponent_photo_image_obj[f"image{index}"]
 
-    def refresh_frames(self):
+    def destroy_existing_frames(self):
 
-        self.blank_frames: dict[str, tk.Frame] = {}
-
-        column = 0
-        row = 2
-
-        for index in range(5):
-            self.blank_frames[f"frame{index}"] = tk.Frame(self, height=64, width=64)
-            self.blank_frames[f"frame{index}"].grid(column=column,row=row)
-
-            if column < 2:
-                column += 1
-            else:
-                column = 0
-                row += 1
-
+        for key in self.stat_frame_dict.keys():
+            self.stat_frame_dict[key].destroy()
 class PokemonStatInformationFrame(tk.Frame):
     def __init__(self, parent_frame: tk.Frame, battling_pokemon_obj: p.BattlingPokemon):
         tk.Frame.__init__(self, parent_frame)
         self.battling_pokemon_obj = battling_pokemon_obj
-
+        
         self.parent_frame = parent_frame
 
         self.pokemon_name = tk.Label(self, text=f"Name: {self.get_name()}")
@@ -286,5 +286,12 @@ class PokemonStatInformationFrame(tk.Frame):
 
         return self.battling_pokemon_obj.level
 
+    def reset(self):
+        self.pokemon_name = ""
+        self.level = ""
 
-    
+class BlankFrame(tk.Frame):
+    def __init__(self, parent_frame: tk.Frame):
+        tk.Frame.__init__(self, parent_frame)
+
+        self.config(height=64, width=64, background="black")
