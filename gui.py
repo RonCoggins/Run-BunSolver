@@ -224,9 +224,6 @@ class OpponentPokemonInfoFrame(tk.Frame):
 
             self.opponent_team_info_dict[f"image{index}"] = tk.Label(self)
 
-            if self.first_load == False:
-                self.stat_frame_dict[f"infoframe{index}"].destroy()
-
             self.stat_frame_dict[f"infoframe{index}"] = PokemonStatInformationFrame(self, opponent_team_pokemon_obj[index])
             self.stat_frame_dict[f"infoframe{index}"].config(height=64,width=64)
 
