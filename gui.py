@@ -24,8 +24,6 @@ class GUI:
         root.geometry(f"{height}x{width}")
         root.resizable(False,False)
 
-        self.first_load = True
-
         main_frame = tk.Frame(root)
         main_frame.grid()
 
@@ -125,13 +123,11 @@ class GUI:
 
     
 class PlayerPokemonInfoFrame(tk.Frame):
-    def __init__(self, parent_frame: tk.Frame, battle_engine: be.BattleEngine, starting_column=1,starting_row=0):
+    def __init__(self, parent_frame: tk.Frame, battle_engine: be.BattleEngine):
         tk.Frame.__init__(self, parent_frame)
    
         self.parent_frame = parent_frame
         self.battle_engine = battle_engine
-
-        
 
         self.create_player_pokemon_team()
 
@@ -144,19 +140,28 @@ class PlayerPokemonInfoFrame(tk.Frame):
         player_team_pokemon_obj:list[p.BattlingPokemon] = list(self.battle_engine.game_state.player_info.team.team.values())
         self.player_team_names: list[str] = [x.pokemon_name.upper() for x in player_team_pokemon_obj]
 
-        self.player_team_png_dict: dict[str,tk.Label] = {}
+        self.player_team_info_dict: dict[str,tk.Label] = {}
+
+        self.stat_frame_dict: dict[str,tk.Frame] = {}
 
         column = 0
         row = 2
         
         for index in range(len(self.player_team_names)):
-            self.player_team_png_dict[f"image{index}"] = tk.Label(self)
-            self.player_team_png_dict[f"image{index}"].grid(column=column,row=row)
+            self.player_team_info_dict[f"image{index}"] = tk.Label(self)
+            self.stat_frame_dict[f"infoframe{index}"] = PokemonStatInformationFrame(self, player_team_pokemon_obj[index])
+            self.stat_frame_dict[f"infoframe{index}"].config(height=64,width=64)
+
+            self.player_team_info_dict[f"image{index}"].grid(column=column,row=row) 
+            self.stat_frame_dict[f"infoframe{index}"].grid(column=column+1,row=row)
+
             if column < 2:
-                column += 1
+                column += 2
             else:
                 column = 0
                 row += 1
+
+            
 
         self.load_player_pokemon_png()
 
@@ -169,13 +174,15 @@ class PlayerPokemonInfoFrame(tk.Frame):
 
             self.player_png_locations[f"image{index}"] = f"{PNG_DIRECTORY}/{pokemon_name}.png"
             self.player_photo_image_obj[f"image{index}"] = tk.PhotoImage(file=self.player_png_locations[f"image{index}"],width=64)
-            self.player_team_png_dict[f"image{index}"]["image"] = self.player_photo_image_obj[f"image{index}"]
+            self.player_team_info_dict[f"image{index}"]["image"] = self.player_photo_image_obj[f"image{index}"]
     
     
 
 class OpponentPokemonInfoFrame(tk.Frame):
+
     def __init__(self, parent_frame: tk.Frame, battle_engine: be.BattleEngine):
         tk.Frame.__init__(self, parent_frame)
+        self.config(background="blue")
         self.parent_frame = parent_frame
         self.battle_engine = battle_engine
 
@@ -197,15 +204,24 @@ class OpponentPokemonInfoFrame(tk.Frame):
 
         opponent_team_pokemon_obj:list[p.BattlingPokemon] = list(trainer_team.team.values())
         self.opponent_team_names: list[str] = [x.pokemon_name.upper() for x in opponent_team_pokemon_obj]
+
+        self.refresh_frames()
         
-        self.opponent_team_png_dict: dict[str,tk.Label] = {}
+        self.opponent_team_info_dict: dict[str,tk.Label] = {}
+
+        self.stat_frame_dict: dict[str,tk.Frame] = {}
 
         column = 0
         row = 2
         
         for index in range(len(self.opponent_team_names)):
-            self.opponent_team_png_dict[f"image{index}"] = tk.Label(self)
-            self.opponent_team_png_dict[f"image{index}"].grid(column=column,row=row)
+
+            self.opponent_team_info_dict[f"image{index}"] = tk.Label(self)
+            self.stat_frame_dict[f"infoframe{index}"] = PokemonStatInformationFrame(self, opponent_team_pokemon_obj[index])
+            self.stat_frame_dict[f"infoframe{index}"].config(height=64,width=64)
+
+            self.opponent_team_info_dict[f"image{index}"].grid(column=column,row=row) 
+            self.stat_frame_dict[f"infoframe{index}"].grid(column=column+1,row=row)
             if column < 2:
                 column += 1
             else:
@@ -225,4 +241,50 @@ class OpponentPokemonInfoFrame(tk.Frame):
 
             self.opponent_png_locations[f"image{index}"] = f"{PNG_DIRECTORY}/{pokemon_name}.png"
             self.opponent_photo_image_obj[f"image{index}"] = tk.PhotoImage(file=self.opponent_png_locations[f"image{index}"],width=64)
-            self.opponent_team_png_dict[f"image{index}"]["image"] = self.opponent_photo_image_obj[f"image{index}"]
+            self.opponent_team_info_dict[f"image{index}"]["image"] = self.opponent_photo_image_obj[f"image{index}"]
+
+    def refresh_frames(self):
+
+        self.blank_frames: dict[str, tk.Frame] = {}
+
+        column = 0
+        row = 2
+
+        for index in range(5):
+            self.blank_frames[f"frame{index}"] = tk.Frame(self, height=64, width=64)
+            self.blank_frames[f"frame{index}"].grid(column=column,row=row)
+
+            if column < 2:
+                column += 1
+            else:
+                column = 0
+                row += 1
+
+class PokemonStatInformationFrame(tk.Frame):
+    def __init__(self, parent_frame: tk.Frame, battling_pokemon_obj: p.BattlingPokemon):
+        tk.Frame.__init__(self, parent_frame)
+        self.battling_pokemon_obj = battling_pokemon_obj
+
+        self.parent_frame = parent_frame
+
+        self.pokemon_name = tk.Label(self, text=f"Name: {self.get_name()}")
+        self.level = tk.Label(self, text=f"Lvl: {self.get_level()}")
+
+        self.stat_mapping: dict[str,int] = {
+            "name": 0,
+            "lvl" : 1
+        }
+
+        self.pokemon_name.grid(row=self.stat_mapping["name"])
+        self.level.grid(row=self.stat_mapping["lvl"])
+    
+    def get_name(self) -> str:
+
+        return self.battling_pokemon_obj.pokemon_name.title()
+
+    def get_level(self) -> int:
+
+        return self.battling_pokemon_obj.level
+
+
+    
