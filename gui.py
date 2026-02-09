@@ -56,68 +56,9 @@ class GUI:
 
         main_frame.rowconfigure(1)
 
-    #     self.turn_var = tk.StringVar()
-    #     self.turn_var.set("Turn Number: " + str(self.battle_engine.game_state.turn_info.turn_number)) 
-    #     tk.Label(battle_frame, textvariable=self.turn_var).grid(row=0, column=0)
-
-    #     self.player_pokemon_var = tk.StringVar()
-    #     self.player_pokemon_var.set("Player Pokemon: " + str(self.battle_engine.game_state.player_info.team.active_pokemon).title()) 
-    #     tk.Label(battle_frame, textvariable=self.player_pokemon_var).grid(row=1,column=0)
-
-    #     self.opponent_pokemon_var = tk.StringVar()
-    #     self.opponent_pokemon_var.set("Opponent Pokemon: " + str(self.battle_engine.game_state.opponent_info.team.active_pokemon).title()) 
-    #     tk.Label(battle_frame, textvariable=self.opponent_pokemon_var).grid(row=2,column=0)
-
-    #     tk.Label(battle_frame, text="HP").grid(row=0, column=1)
-
-    #     self.player_pokemon_health_var = tk.StringVar()
-    #     self.player_pokemon_health_var.set(str(self.battle_engine.game_state.player_info.team.active_pokemon.current_HP)) 
-    #     tk.Label(battle_frame, textvariable=self.player_pokemon_health_var).grid(row=1,column=1)
-
-    #     self.opponent_pokemon_health_var = tk.StringVar()
-    #     self.opponent_pokemon_health_var.set(str(self.battle_engine.game_state.opponent_info.team.active_pokemon.current_HP)) 
-    #     tk.Label(battle_frame, textvariable=self.opponent_pokemon_health_var).grid(row=2,column=1)
-
-    #     tk.Label(battle_frame, text="Last Move Used").grid(row=0, column=2)
-
-    #     self.player_pokemon_move_used_var = tk.StringVar()
-    #     self.player_pokemon_move_used_var.set(str(self.battle_engine.game_state.player_info.current_move)) 
-    #     tk.Label(battle_frame, textvariable=self.player_pokemon_move_used_var).grid(row=1,column=2)
-
-    #     self.opponent_pokemon_move_used_var = tk.StringVar()
-    #     self.opponent_pokemon_move_used_var.set(str(self.battle_engine.game_state.opponent_info.current_move)) 
-    #     tk.Label(battle_frame, textvariable=self.opponent_pokemon_move_used_var).grid(row=2,column=2)
-
-    #     self.player_pokemon_remaining_var = tk.StringVar()
-    #     self.player_pokemon_remaining_var.set(str(self.battle_engine.game_state.player_info.team.team))
-    #     tk.Label(stats_display_frame, textvariable=self.player_pokemon_remaining_var,wraplength=100,justify="left").grid(row=2,column=2)
-        
-    #     self.available_trainers = self.create_available_trainers_list(stats_display_frame)
-    #     self.available_trainers.grid(row=5, column=2)
-
-    #     self.opponent_pokemon_remaining_var = tk.StringVar()
-    #     self.opponent_pokemon_remaining_var.set(str(self.battle_engine.game_state.opponent_info.team.team))
-    #     tk.Label(stats_display_frame, textvariable=self.opponent_pokemon_remaining_var,wraplength=100,justify="left").grid(row=3,column=2)
-
-
-
         root.mainloop()
     
-    # def update_labels(self) -> None:
-    #     self.turn_var.set("Turn Number: " + str(self.battle_engine.game_state.turn_info.turn_number)) 
 
-    #     self.player_pokemon_var.set("Player Pokemon: " + str(self.battle_engine.game_state.player_info.team.active_pokemon).title()) 
-    #     self.opponent_pokemon_var.set("Opponent Pokemon: " + str(self.battle_engine.game_state.opponent_info.team.active_pokemon).title())
-
-    #     self.player_pokemon_health_var.set(str(self.battle_engine.game_state.player_info.team.active_pokemon.current_HP)) 
-    #     self.opponent_pokemon_health_var.set(str(self.battle_engine.game_state.opponent_info.team.active_pokemon.current_HP))
-
-    #     self.player_pokemon_move_used_var.set(str(self.battle_engine.game_state.player_info.current_move))
-    #     self.opponent_pokemon_move_used_var.set(str(self.battle_engine.game_state.opponent_info.current_move))
-
-    #     self.player_pokemon_remaining_var.set(str(self.battle_engine.game_state.player_info.team.team))
-
-    
 
     
     
@@ -337,6 +278,9 @@ class BattleFrame(tk.Frame):
         self.battle_engine = battle_engine
         self.game_state = battle_engine.game_state
 
+        self.player_row = 3
+        self.opponent_row = 4
+
         self.active_pokemon = {}
         
         self.active_pokemon_data = {"player": {},
@@ -378,17 +322,34 @@ class BattleFrame(tk.Frame):
 
     def update_header_info(self):
 
-        self.header_info = {}
+        self.turn_var = tk.StringVar()
+        self.turn_var.set("Turn Number: " + str(self.battle_engine.game_state.turn_info.turn_number)) 
+        tk.Label(self, textvariable=self.turn_var).grid(row=0, column=0)
 
-        for key in self.active_pokemon:
-            self.header_info[key]["stringvar"]
+        self.player_pokemon_health_var = tk.StringVar()
+        self.player_pokemon_health_var.set(str(self.battle_engine.game_state.player_info.team.active_pokemon.current_HP)) 
+        tk.Label(self, textvariable=self.player_pokemon_health_var).grid(row=self.player_row,column=1)
 
+        self.opponent_pokemon_health_var = tk.StringVar()
+        self.opponent_pokemon_health_var.set(str(self.battle_engine.game_state.opponent_info.team.active_pokemon.current_HP)) 
+        tk.Label(self, textvariable=self.opponent_pokemon_health_var).grid(row=self.opponent_row,column=1)
 
-    # def destroy_old_labels(self):
+        self.player_pokemon_move_used_var = tk.StringVar()
+        self.player_pokemon_move_used_var.set(str(self.battle_engine.game_state.player_info.current_move)) 
+        tk.Label(self, textvariable=self.player_pokemon_move_used_var).grid(row=self.player_row,column=2)
 
-    #     for key, value in self.active_pokemon_data.items():
-    #         print(self.active_pokemon_data[key])
-            
+        self.opponent_pokemon_move_used_var = tk.StringVar()
+        self.opponent_pokemon_move_used_var.set(str(self.battle_engine.game_state.opponent_info.current_move)) 
+        tk.Label(self, textvariable=self.opponent_pokemon_move_used_var).grid(row=self.opponent_row,column=2)
+
+        self.player_damage_dealt = tk.StringVar()
+        self.player_damage_dealt.set(str(self.battle_engine.game_state.player_info.damage_dealt_last_turn)) 
+        tk.Label(self, textvariable=self.player_damage_dealt).grid(row=self.player_row,column=3)
+
+        self.opponent_damage_dealt = tk.StringVar()
+        self.opponent_damage_dealt.set(str(self.battle_engine.game_state.opponent_info.damage_dealt_last_turn)) 
+        tk.Label(self, textvariable=self.opponent_damage_dealt).grid(row=self.opponent_row,column=3)
+        
 
 
 
