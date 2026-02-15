@@ -89,9 +89,9 @@ class BattleEngine:
     def player_attack(self):
 
         damage:int = dc.DamageCalculation(
-            self.game_state.opponent_info.team.active_pokemon,
-            self.game_state.player_info.team.active_pokemon,
-            self.game_state.player_info.current_move,
+            attacking_pokemon= self.game_state.player_info.team.active_pokemon,
+            target_pokemon=self.game_state.opponent_info.team.active_pokemon,
+            move= self.game_state.player_info.current_move,
         ).final_damage
 
         self.game_state.player_info.damage_dealt_last_turn = damage
@@ -107,7 +107,7 @@ class BattleEngine:
         damage:int = dc.DamageCalculation(
             self.game_state.opponent_info.team.active_pokemon,
             self.game_state.player_info.team.active_pokemon,
-            self.game_state.player_info.current_move,
+            self.game_state.opponent_info.current_move,
         ).final_damage
 
         self.game_state.opponent_info.damage_dealt_last_turn = damage

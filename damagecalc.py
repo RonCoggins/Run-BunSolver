@@ -46,9 +46,9 @@ class DamageCalculation():
 
         base_formula = (2 * level / 5 + 2) * power
         
-        # print(f"MOVE POWER: {power}")
-        # print(f"LEVEL: {level}")
-        # print(f"BASE: {base_formula}")
+        print(f"MOVE POWER: {power}")
+        print(f"LEVEL: {level}")
+        print(f"BASE: {base_formula}")
 
         if self.move_category == "physical":
             base_formula *= (self.attacking_pokemon.stats["atk"]/self.target_pokemon.stats["def"])
@@ -59,17 +59,17 @@ class DamageCalculation():
         else:
             base_formula = 0
 
-        # print(f"BASE2: {base_formula}")
+        print(f"BASE2: {base_formula}")
 
         base_formula /= 50
         base_formula = math.floor(base_formula)
         
-        # print(f"BASE3: {base_formula}")
+        print(f"BASE3: {base_formula}")
 
         base_formula += 2
         base_formula = math.floor(base_formula)
         
-        # print(f"BASE: {base_formula}")
+        print(f"BASE: {base_formula}")
 
         #Damage=((2×Level5+2)×Power×AD50+2)×Targets×PB×Weather×GlaiveRush×Critical×random×STAB×Type×Burn×other×ZMove×TeraShield
 
@@ -77,22 +77,22 @@ class DamageCalculation():
             base_formula *= 1.5
             base_formula = math.floor(base_formula)
 
-            # print(f"CRIT: {base_formula}")
+            print(f"CRIT: {base_formula}")
 
         base_formula *= self.apply_random_int()
         base_formula = math.floor(base_formula)
         
-        # print(f"RANDOM: {base_formula}")
+        print(f"RANDOM: {base_formula}")
 
         base_formula *= self.apply_stab()
         base_formula = math.floor(base_formula)
         
-        # print(f"STAB: {base_formula}")
+        print(f"STAB: {base_formula}")
 
         base_formula *= t.TypeMatchUp(self.move_type, self.target_pokemon.typing["type1"], self.target_pokemon.typing["type2"]).multiplier()
         base_formula = math.floor(base_formula)
         
-        # print(f"TYPE: {base_formula}")
+        print(f"TYPE: {base_formula}")
         
         if self.final_calc == True:
             print(f"\t\tFinal damage calculation for {self.move.move_name} is {base_formula}")

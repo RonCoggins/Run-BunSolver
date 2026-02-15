@@ -16,9 +16,5 @@ def main():
     battle = be.BattleEngine()
     gui.GUI(battle)
 
-    
-test
-
-
 main()
 

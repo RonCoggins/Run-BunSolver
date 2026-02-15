@@ -322,17 +322,29 @@ class BattleFrame(tk.Frame):
 
     def update_header_info(self):
 
+        self.set_turn_number()
+        self.set_pokemon_health()
+        self.set_pokemon_move_used()
+        self.set_damage_dealt
+    
+
+    def set_turn_number(self):
+
         self.turn_var = tk.StringVar()
         self.turn_var.set("Turn Number: " + str(self.battle_engine.game_state.turn_info.turn_number)) 
         tk.Label(self, textvariable=self.turn_var).grid(row=0, column=0)
+    
+    def set_pokemon_health(self):
 
         self.player_pokemon_health_var = tk.StringVar()
-        self.player_pokemon_health_var.set(str(self.battle_engine.game_state.player_info.team.active_pokemon.current_HP)) 
+        self.player_pokemon_health_var.set(str(f"{self.battle_engine.game_state.player_info.team.active_pokemon.current_HP} / {self.battle_engine.game_state.player_info.team.active_pokemon.UserPokemon.stats["hp"]}")) 
         tk.Label(self, textvariable=self.player_pokemon_health_var).grid(row=self.player_row,column=1)
-
+    
         self.opponent_pokemon_health_var = tk.StringVar()
-        self.opponent_pokemon_health_var.set(str(self.battle_engine.game_state.opponent_info.team.active_pokemon.current_HP)) 
+        self.opponent_pokemon_health_var.set(str(f"{self.battle_engine.game_state.opponent_info.team.active_pokemon.current_HP} / {self.battle_engine.game_state.opponent_info.team.active_pokemon.UserPokemon.stats["hp"]}"))
         tk.Label(self, textvariable=self.opponent_pokemon_health_var).grid(row=self.opponent_row,column=1)
+
+    def set_pokemon_move_used(self):
 
         self.player_pokemon_move_used_var = tk.StringVar()
         self.player_pokemon_move_used_var.set(str(self.battle_engine.game_state.player_info.current_move)) 
@@ -341,6 +353,8 @@ class BattleFrame(tk.Frame):
         self.opponent_pokemon_move_used_var = tk.StringVar()
         self.opponent_pokemon_move_used_var.set(str(self.battle_engine.game_state.opponent_info.current_move)) 
         tk.Label(self, textvariable=self.opponent_pokemon_move_used_var).grid(row=self.opponent_row,column=2)
+    
+    def set_damage_dealt(self):
 
         self.player_damage_dealt = tk.StringVar()
         self.player_damage_dealt.set(str(self.battle_engine.game_state.player_info.damage_dealt_last_turn)) 
