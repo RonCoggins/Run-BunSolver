@@ -65,6 +65,8 @@ class BattleFrame(tk.Frame):
         self.battle_engine = battle_engine
         self.game_state = battle_engine.game_state
 
+        self.first_load = True
+
         self.player_row = 3
         self.opponent_row = 4
 
@@ -75,7 +77,6 @@ class BattleFrame(tk.Frame):
 
         self.add_buttons()
         self.add_headers()
-        self.update_info()
 
     def add_buttons(self):
 
@@ -159,6 +160,7 @@ class BattleFrame(tk.Frame):
 
     def update_active_pokemon_png(self):
 
+        
         self.active_pokemon_data = {"player": {},
                                     "opponent": {}}
 
@@ -243,7 +245,7 @@ class PlayerPokemonInfoFrame(tk.Frame):
 
 class OpponentPokemonInfoFrame(tk.Frame):
 
-    def __init__(self, parent_frame: tk.Frame, battle_engine: be.BattleEngine, battle_frame: tk.Frame):
+    def __init__(self, parent_frame: tk.Frame, battle_engine: be.BattleEngine, battle_frame: BattleFrame):
         tk.Frame.__init__(self, parent_frame)
 
         self.config(highlightbackground="black",highlightthickness=1, padx=10)
@@ -254,7 +256,7 @@ class OpponentPokemonInfoFrame(tk.Frame):
 
         self.parent_frame = parent_frame
         self.battle_engine = battle_engine
-        self.battle_frame = battle_frame
+        self.battle_frame : BattleFrame = battle_frame
 
         self.first_load:bool  = True
 
@@ -277,6 +279,7 @@ class OpponentPokemonInfoFrame(tk.Frame):
         trainer_team = t.BattlingTeam(False, trainer_selection)
 
         self.battle_frame.start_battle_button.configure(state="active")
+        self.battle_frame.update_info()
 
         opponent_team_pokemon_obj:list[p.BattlingPokemon] = list(trainer_team.team.values())
         self.opponent_team_names: list[str] = [x.pokemon_name.upper() for x in opponent_team_pokemon_obj]
