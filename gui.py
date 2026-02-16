@@ -59,6 +59,122 @@ class GUI:
         root.mainloop()
     
 
+class BattleFrame(tk.Frame):
+    def __init__(self, parent_frame,battle_engine: be.BattleEngine):
+        tk.Frame.__init__(self, parent_frame)
+        self.battle_engine = battle_engine
+        self.game_state = battle_engine.game_state
+
+        self.player_row = 3
+        self.opponent_row = 4
+
+        self.active_pokemon = {}
+        
+        self.active_pokemon_data = {"player": {},
+                                    "opponent": {}}
+
+        self.add_buttons()
+        self.add_headers()
+        self.update_info()
+
+    def add_buttons(self):
+
+        self.start_battle_button: tk.Button = tk.Button(self, text="Start Battle", command=lambda: [self.battle_engine.run_one_turn(), self.update_info()], state="disabled")
+        self.start_battle_button.grid(row=1, column =1)
+        tk.Button(self, text="Simulate Full Battle", command=lambda: [self.battle_engine.finish_battle(), self.update_info()]).grid(row=1, column =2)
+        tk.Button(self, text="Reset Battle", command=lambda: [self.battle_engine.reset_battle(), self.update_info()]).grid(row=1, column =3)
+
+    def add_headers(self):
+        
+        self.headers = {"pos1": "Active Pokemon",
+                        "pos2": "Current HP",
+                        "pos3": "Move Used Last",
+                        "pos4": "Damage Dealt"}
+        
+        self.headers_labels = {}
+        
+        column = 0
+
+        for key, value in self.headers.items():
+            self.headers_labels[key] = tk.Label(self, text= value)
+            self.headers_labels[key].grid(row=2, column = column)
+            column += 1
+
+    def update_info(self):
+
+        self.active_pokemon: dict[str,str] = {"player": self.battle_engine.game_state.player_info.team.active_pokemon.pokemon_name,
+                                         "opponent": self.battle_engine.game_state.opponent_info.team.active_pokemon.pokemon_name}
+        
+        self.update_header_info()
+        self.update_active_pokemon_png()
+
+    def update_header_info(self):
+
+        self.set_turn_number()
+        self.set_pokemon_health()
+        self.set_pokemon_move_used()
+        self.set_damage_dealt()
+    
+
+    def set_turn_number(self):
+
+        self.turn_var = tk.StringVar()
+        self.turn_var.set("Turn Number: " + str(self.battle_engine.game_state.turn_info.turn_number)) 
+        tk.Label(self, textvariable=self.turn_var).grid(row=0, column=0)
+    
+    def set_pokemon_health(self):
+
+        self.player_pokemon_health_var = tk.StringVar()
+        self.player_pokemon_health_var.set(str(f"{self.battle_engine.game_state.player_info.team.active_pokemon.current_HP} / {self.battle_engine.game_state.player_info.team.active_pokemon.UserPokemon.stats["hp"]}")) 
+        tk.Label(self, textvariable=self.player_pokemon_health_var).grid(row=self.player_row,column=1)
+    
+        self.opponent_pokemon_health_var = tk.StringVar()
+        self.opponent_pokemon_health_var.set(str(f"{self.battle_engine.game_state.opponent_info.team.active_pokemon.current_HP} / {self.battle_engine.game_state.opponent_info.team.active_pokemon.UserPokemon.stats["hp"]}"))
+        tk.Label(self, textvariable=self.opponent_pokemon_health_var).grid(row=self.opponent_row,column=1)
+
+    def set_pokemon_move_used(self):
+
+        self.player_pokemon_move_used_var = tk.StringVar()
+        self.player_pokemon_move_used_var.set(str(self.battle_engine.game_state.player_info.current_move)) 
+        tk.Label(self, textvariable=self.player_pokemon_move_used_var).grid(row=self.player_row,column=2)
+
+        self.opponent_pokemon_move_used_var = tk.StringVar()
+        self.opponent_pokemon_move_used_var.set(str(self.battle_engine.game_state.opponent_info.current_move)) 
+        tk.Label(self, textvariable=self.opponent_pokemon_move_used_var).grid(row=self.opponent_row,column=2)
+    
+    def set_damage_dealt(self):
+
+        self.player_damage_dealt = tk.StringVar()
+        self.player_damage_dealt.set(str(self.battle_engine.game_state.player_info.damage_dealt_last_turn)) 
+        tk.Label(self, textvariable=self.player_damage_dealt).grid(row=self.player_row,column=3)
+
+        self.opponent_damage_dealt = tk.StringVar()
+        self.opponent_damage_dealt.set(str(self.battle_engine.game_state.opponent_info.damage_dealt_last_turn)) 
+        tk.Label(self, textvariable=self.opponent_damage_dealt).grid(row=self.opponent_row,column=3)
+        
+
+
+
+
+
+    def update_active_pokemon_png(self):
+
+        self.active_pokemon_data = {"player": {},
+                                    "opponent": {}}
+
+        print(self.active_pokemon)
+
+        for key, value in self.active_pokemon.items():
+            png_location = f"{PNG_DIRECTORY}/{value.upper()}.png"
+            print(png_location)
+            self.active_pokemon_data[key]["photo_image_obj"] = tk.PhotoImage(file=png_location,height=64,width=64)
+            self.active_pokemon_data[key]["png_label"] = tk.Label(self, image=self.active_pokemon_data[key]["photo_image_obj"])
+
+            if key == "player":
+                self.active_pokemon_data[key]["png_label"].grid(row=3, column=0)
+            else:
+                self.active_pokemon_data[key]["png_label"].grid(row=4, column=0)
+
 
     
     
@@ -160,7 +276,7 @@ class OpponentPokemonInfoFrame(tk.Frame):
         self.battle_engine.init_game_state(trainer_selection)
         trainer_team = t.BattlingTeam(False, trainer_selection)
 
-        self.battle_frame.update_info()
+        self.battle_frame.start_battle_button.configure(state="active")
 
         opponent_team_pokemon_obj:list[p.BattlingPokemon] = list(trainer_team.team.values())
         self.opponent_team_names: list[str] = [x.pokemon_name.upper() for x in opponent_team_pokemon_obj]
@@ -271,123 +387,6 @@ class BlankFrame(tk.Frame):
         tk.Frame.__init__(self, parent_frame)
 
         self.config(height=64, width=64)
-
-class BattleFrame(tk.Frame):
-    def __init__(self, parent_frame,battle_engine: be.BattleEngine):
-        tk.Frame.__init__(self, parent_frame)
-        self.battle_engine = battle_engine
-        self.game_state = battle_engine.game_state
-
-        self.player_row = 3
-        self.opponent_row = 4
-
-        self.active_pokemon = {}
-        
-        self.active_pokemon_data = {"player": {},
-                                    "opponent": {}}
-
-        self.add_buttons()
-        self.add_headers()
-        self.update_info()
-
-    def add_buttons(self):
-
-        tk.Button(self, text="Start Battle", command=lambda: [self.battle_engine.run_one_turn(), self.update_info()]).grid(row=1, column =1)
-        tk.Button(self, text="Simulate Full Battle", command=lambda: [self.battle_engine.finish_battle(), self.update_info()]).grid(row=1, column =2)
-        tk.Button(self, text="Reset Battle", command=lambda: [self.battle_engine.reset_battle(), self.update_info()]).grid(row=1, column =3)
-
-    def add_headers(self):
-        
-        self.headers = {"pos1": "Active Pokemon",
-                        "pos2": "Current HP",
-                        "pos3": "Move Used Last",
-                        "pos4": "Damage Dealt"}
-        
-        self.headers_labels = {}
-        
-        column = 0
-
-        for key, value in self.headers.items():
-            self.headers_labels[key] = tk.Label(self, text= value)
-            self.headers_labels[key].grid(row=2, column = column)
-            column += 1
-
-    def update_info(self):
-
-        self.active_pokemon: dict[str,str] = {"player": self.battle_engine.game_state.player_info.team.active_pokemon.pokemon_name,
-                                         "opponent": self.battle_engine.game_state.opponent_info.team.active_pokemon.pokemon_name}
-        
-        self.update_header_info()
-        self.update_active_pokemon_png()
-
-    def update_header_info(self):
-
-        self.set_turn_number()
-        self.set_pokemon_health()
-        self.set_pokemon_move_used()
-        self.set_damage_dealt
-    
-
-    def set_turn_number(self):
-
-        self.turn_var = tk.StringVar()
-        self.turn_var.set("Turn Number: " + str(self.battle_engine.game_state.turn_info.turn_number)) 
-        tk.Label(self, textvariable=self.turn_var).grid(row=0, column=0)
-    
-    def set_pokemon_health(self):
-
-        self.player_pokemon_health_var = tk.StringVar()
-        self.player_pokemon_health_var.set(str(f"{self.battle_engine.game_state.player_info.team.active_pokemon.current_HP} / {self.battle_engine.game_state.player_info.team.active_pokemon.UserPokemon.stats["hp"]}")) 
-        tk.Label(self, textvariable=self.player_pokemon_health_var).grid(row=self.player_row,column=1)
-    
-        self.opponent_pokemon_health_var = tk.StringVar()
-        self.opponent_pokemon_health_var.set(str(f"{self.battle_engine.game_state.opponent_info.team.active_pokemon.current_HP} / {self.battle_engine.game_state.opponent_info.team.active_pokemon.UserPokemon.stats["hp"]}"))
-        tk.Label(self, textvariable=self.opponent_pokemon_health_var).grid(row=self.opponent_row,column=1)
-
-    def set_pokemon_move_used(self):
-
-        self.player_pokemon_move_used_var = tk.StringVar()
-        self.player_pokemon_move_used_var.set(str(self.battle_engine.game_state.player_info.current_move)) 
-        tk.Label(self, textvariable=self.player_pokemon_move_used_var).grid(row=self.player_row,column=2)
-
-        self.opponent_pokemon_move_used_var = tk.StringVar()
-        self.opponent_pokemon_move_used_var.set(str(self.battle_engine.game_state.opponent_info.current_move)) 
-        tk.Label(self, textvariable=self.opponent_pokemon_move_used_var).grid(row=self.opponent_row,column=2)
-    
-    def set_damage_dealt(self):
-
-        self.player_damage_dealt = tk.StringVar()
-        self.player_damage_dealt.set(str(self.battle_engine.game_state.player_info.damage_dealt_last_turn)) 
-        tk.Label(self, textvariable=self.player_damage_dealt).grid(row=self.player_row,column=3)
-
-        self.opponent_damage_dealt = tk.StringVar()
-        self.opponent_damage_dealt.set(str(self.battle_engine.game_state.opponent_info.damage_dealt_last_turn)) 
-        tk.Label(self, textvariable=self.opponent_damage_dealt).grid(row=self.opponent_row,column=3)
-        
-
-
-
-
-
-    def update_active_pokemon_png(self):
-        
-        
-
-        self.active_pokemon_data = {"player": {},
-                                    "opponent": {}}
-
-        print(self.active_pokemon)
-
-        for key, value in self.active_pokemon.items():
-            png_location = f"{PNG_DIRECTORY}/{value.upper()}.png"
-            print(png_location)
-            self.active_pokemon_data[key]["photo_image_obj"] = tk.PhotoImage(file=png_location,height=64,width=64)
-            self.active_pokemon_data[key]["png_label"] = tk.Label(self, image=self.active_pokemon_data[key]["photo_image_obj"])
-
-            if key == "player":
-                self.active_pokemon_data[key]["png_label"].grid(row=3, column=0)
-            else:
-                self.active_pokemon_data[key]["png_label"].grid(row=4, column=0)
 
 
             
