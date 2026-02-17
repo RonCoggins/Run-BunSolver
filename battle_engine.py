@@ -7,7 +7,7 @@ import damagecalc as dc
 import move as m
 import game_state as gs
 import team as t
-import AIDecisionMaker.opponentaidecision as oAI
+import AIDecisionMaker.maxdamage as AIMax
 import AIDecisionMaker.playeraidecision as pAI
 import decisiontree as dt
 import pokemon as p
@@ -18,9 +18,8 @@ class BattleEngine:
 
         self.game_state: gs.GameState
     
-    def init_game_state(self, opponent_trainer):
+    def init_game_state(self, opponent_trainer: str):
         self.game_state = gs.GameState(opponent_trainer)
-        print("called")
     
     def run_one_turn(self):
         
@@ -52,10 +51,10 @@ class BattleEngine:
         self.opponent_select_move()
 
     def player_select_move(self) -> None:
-        self.game_state.player_info.current_move = pAI.PlayerMoveAIDecision(self.game_state).highest_damage_move 
+        self.game_state.player_info.current_move = AIMax.MaxDamageAI(self.game_state, True).highest_damage_move 
 
     def opponent_select_move(self) -> None:
-        self.game_state.opponent_info.current_move = oAI.OpponentMoveAIDecision(self.game_state).highest_damage_move
+        self.game_state.opponent_info.current_move = AIMax.MaxDamageAI(self.game_state, False).highest_damage_move 
 
     def determine_first_mover(self) -> None:
 
