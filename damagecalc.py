@@ -5,6 +5,7 @@ import type_advantage as t
 import constants
 
 import math
+import numpy as np
 
 class DamageCalculation():
     def __init__(self,
@@ -27,14 +28,16 @@ class DamageCalculation():
 
         self.final_calc: bool = final_calc
 
-        self.final_damage:int = self.core_damage_calculation()
+        self.damage_range: np.array = self.core_damage_calculation()
+
+        self.final_damage:int = max(self.damage_range)
 
         # self.max_damage = self.final_damage_calculation("max")
         # self.min_damage = self.final_damage_calculation("min")
         # self.all_damage_rolls = self.all_damage_rolls()
 
     
-    def core_damage_calculation(self) -> int:
+    def core_damage_calculation(self) -> np.array:
 
         if self.move_base_power == None:
             return 0
@@ -78,17 +81,17 @@ class DamageCalculation():
             print(f"CRIT: {base_formula}")
 
         base_formula *= self.apply_random_int()
-        base_formula = math.floor(base_formula)
+        base_formula = np.floor(base_formula)
         
         print(f"RANDOM: {base_formula}")
 
         base_formula *= self.apply_stab()
-        base_formula = math.floor(base_formula)
+        base_formula = np.floor(base_formula)
         
         print(f"STAB: {base_formula}")
 
         base_formula *= t.TypeMatchUp(self.move_type, self.target_pokemon.typing["type1"], self.target_pokemon.typing["type2"]).multiplier()
-        base_formula = math.floor(base_formula)
+        base_formula = np.floor(base_formula)
         
         print(f"TYPE: {base_formula}")
         
@@ -100,7 +103,7 @@ class DamageCalculation():
         return base_formula
 
     def apply_random_int(self):
-        return 1
+        return np.array(constants.RANDOM_DAMAGE_INT)
     
     def apply_stab(self):
         
