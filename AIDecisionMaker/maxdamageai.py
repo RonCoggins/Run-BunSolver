@@ -17,7 +17,7 @@ class MaxDamageAI:
             self.decision_making_pokemon: p.BattlingPokemon = game_state.opponent_info.team.active_pokemon
             self.other_pokemon: p.BattlingPokemon = game_state.player_info.team.active_pokemon
 
-        self.highest_damage_move: m.Move = self.get_highest_damage_move()
+        self.selected_move: m.Move = self.get_highest_damage_move()
 
 
     def get_highest_damage_move(self):

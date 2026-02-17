@@ -7,8 +7,8 @@ import damagecalc as dc
 import move as m
 import game_state as gs
 import team as t
-import AIDecisionMaker.maxdamage as AIMax
-import AIDecisionMaker.playeraidecision as pAI
+import AIDecisionMaker.maxdamageai as AIMax
+import AIDecisionMaker.runandbunai as AIRnB
 import decisiontree as dt
 import pokemon as p
 
@@ -51,10 +51,10 @@ class BattleEngine:
         self.opponent_select_move()
 
     def player_select_move(self) -> None:
-        self.game_state.player_info.current_move = AIMax.MaxDamageAI(self.game_state, True).highest_damage_move 
+        self.game_state.player_info.current_move = AIRnB.RunAndBunAI(self.game_state, True).selected_move 
 
     def opponent_select_move(self) -> None:
-        self.game_state.opponent_info.current_move = AIMax.MaxDamageAI(self.game_state, False).highest_damage_move 
+        self.game_state.opponent_info.current_move = AIRnB.RunAndBunAI(self.game_state, False).selected_move 
 
     def determine_first_mover(self) -> None:
 
