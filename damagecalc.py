@@ -27,16 +27,14 @@ class DamageCalculation():
 
         self.final_calc: bool = final_calc
 
-        self.final_damage:int = self.final_damage_calculation()
+        self.final_damage:int = self.core_damage_calculation()
 
         # self.max_damage = self.final_damage_calculation("max")
         # self.min_damage = self.final_damage_calculation("min")
         # self.all_damage_rolls = self.all_damage_rolls()
 
     
-    def final_damage_calculation(self) -> int:
-
-        
+    def core_damage_calculation(self) -> int:
 
         if self.move_base_power == None:
             return 0

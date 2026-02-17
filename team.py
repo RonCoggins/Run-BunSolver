@@ -8,8 +8,8 @@ import constants
 import pokemon as p
 import showdownparser
 
-import opponentaidecision as oAI
-import playeraidecision as pAI
+import AIDecisionMaker.opponentaidecision as oAI
+import AIDecisionMaker.playeraidecision as pAI
 
 
 class BattlingTeam:

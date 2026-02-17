@@ -7,8 +7,8 @@ import damagecalc as dc
 import move as m
 import game_state as gs
 import team as t
-import opponentaidecision as oAI
-import playeraidecision as pAI
+import AIDecisionMaker.opponentaidecision as oAI
+import AIDecisionMaker.playeraidecision as pAI
 import decisiontree as dt
 import pokemon as p
 

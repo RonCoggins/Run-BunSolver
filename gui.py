@@ -47,11 +47,6 @@ class GUI:
         self.player_team_frame.columnconfigure(1)
         self.opponent_team_frame.columnconfigure(1)
 
-
-        ### PLAYER POKEMON LIST BOX
-
-        ### Start Battle Button
-        
         
 
         main_frame.rowconfigure(1)
@@ -152,11 +147,6 @@ class BattleFrame(tk.Frame):
         self.opponent_damage_dealt = tk.StringVar()
         self.opponent_damage_dealt.set(str(self.battle_engine.game_state.opponent_info.damage_dealt_last_turn)) 
         tk.Label(self, textvariable=self.opponent_damage_dealt).grid(row=self.opponent_row,column=3)
-        
-
-
-
-
 
     def update_active_pokemon_png(self):
 

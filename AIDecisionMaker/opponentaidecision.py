@@ -9,7 +9,6 @@ class OpponentMoveAIDecision:
     def __init__(self, game_state: gs.GameState):
 
         self.player_pokemon: p.BattlingPokemon = game_state.player_info.team.active_pokemon
-
         self.opponent_pokemon: p.BattlingPokemon = game_state.opponent_info.team.active_pokemon
 
         self.highest_damage_move: m.Move = self.get_highest_damage_move()
