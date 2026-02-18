@@ -6,9 +6,6 @@ import damagecalc as dc
 import numpy as np
 import numpy.typing as npt
 
-from collections import Counter
-from functools import reduce
-
 import AIDecisionMaker.runandbunaiconstants as constants
 
 class RunAndBunAI:
@@ -43,7 +40,7 @@ class RunAndBunAI:
         self.get_highest_damage_rolls()
         
 
-        self.score_damaging_moves()
+        self.score_moves()
         self.get_highest_scoring_move()
         print(self.move_scores)
         self.highest_scoring_move = max(self.move_scores, key=self.move_scores.get)
@@ -64,68 +61,55 @@ class RunAndBunAI:
             range_matrix[index] = damage_range
         
         highest_damage_array = np.max(range_matrix, axis=0)
-
-        print(highest_damage_array)
         
         overlapping_rolls :dict[str,int]= {"move1" : 0,
                                             "move2" : 0,
                                             "move3" : 0,
                                             "move4" : 0,}
+
+        total_rolls = 0
         
         for index, damage_range in self.damage_ranges.items():
             for damage_value in damage_range:
                 if damage_value in highest_damage_array:
-                    print(f"Move Index: {index} {damage_value} in {damage_range}")
                     overlapping_rolls[index] += 1
+                    total_rolls += 1
         
-        print(overlapping_rolls)
+        self.selection_chance :dict[str,int]= {"move1" : overlapping_rolls["move1"]/total_rolls,
+                                                "move2" : overlapping_rolls["move2"]/total_rolls,
+                                                "move3" : overlapping_rolls["move3"]/total_rolls,
+                                                "move4" : overlapping_rolls["move4"]/total_rolls,}
 
+    def score_moves(self):
 
-
-
-
-        
-
-
-
-
-
-
-    def score_damaging_moves(self):
-        
-        print(self.damage_ranges)
-
-        highest_damage = self.damage_ranges[max(self.damage_ranges, key=self.damage_ranges.get)]
-
-        print(f"Highest Damage {highest_damage}")
-
-        for move_index, damage_value in damages.items():
-            if damage_value == highest_damage:
-                self.possible_scores[move_index] = constants.MIN_DAMAGING_MOVE_SCORE,constants.MAX_DAMAGING_MOVE_SCORE
-            else:
-                self.possible_scores[move_index] = [constants.DEFAULT_MOVE_SCORE]
-
-
-        
+        for move_index, selection_chance in self.selection_chance.items():
+            self.possible_scores[move_index] = constants.MIN_DAMAGING_MOVE_SCORE,constants.MAX_DAMAGING_MOVE_SCORE,selection_chance
+            
 
     def get_highest_scoring_move(self):
 
-        #print(self.possible_scores)
+        print(self.possible_scores)
+
         score_index = 0
         chance_index = 1
 
-        score_array: list[int] = []
-        chance_array: list[float]= []
+        expected_score = 0
 
-        for move_index, scores in self.possible_scores.items():
-            for score in scores:
-                score_array.append(score[score_index])
-                chance_array.append(score[chance_index])
-            
-            random_choice = int(np.random.choice(a=score_array,p=chance_array))
-            self.move_scores[move_index] = random_choice
-            score_array: list[int] = []
-            chance_array: list[float]= []
+        for index, scores in enumerate(self.possible_scores.values()):
+            print(scores)
+            score = scores[index][score_index]
+            chance = scores[index][chance_index]
+            move_selection_chance = scores[-1]
+
+            print(score)
+            print(chance)
+            print(move_selection_chance)
+
+
+            eS = score*chance*move_selection_chance
+            expected_score += eS
+        
+            print(f"HERE: {expected_score}")
             
 
                 
