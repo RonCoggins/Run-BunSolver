@@ -3,6 +3,8 @@ import pokemon as p
 import game_state as gs
 import damagecalc as dc
 
+import AIDecisionMaker.runandbunaiconstants as constants
+
 
 
 
@@ -19,6 +21,11 @@ class RunAndBunAI:
         else:
             self.decision_making_pokemon: p.BattlingPokemon = game_state.opponent_info.team.active_pokemon
             self.other_pokemon: p.BattlingPokemon = game_state.player_info.team.active_pokemon
+
+        self.possible_scores : dict[str, list[list[int|float]]] = {"move1" : [[]],
+                                                                    "move2" : [[]],
+                                                                    "move3" : [[]],
+                                                                    "move4" : [[]],}
         
         self.move_scores :dict[str,int] = {"move1" : 0,
                                            "move2" : 0,
@@ -42,15 +49,15 @@ class RunAndBunAI:
                 self.decision_making_pokemon, self.other_pokemon, move_obj, final_calc=False
             ).final_damage
 
-        highest_damage = damages[max(damages,key=damages.get)]
+        highest_damage = damages[max(damages, key=damages.get)]
 
         print(f"Highest Damage {highest_damage}")
 
         for move_index, damage_value in damages.items():
             if damage_value == highest_damage:
-                self.move_scores[move_index] = 6
+                self.possible_scores[move_index] = constants.MIN_DAMAGING_MOVE_SCORE,constants.MAX_DAMAGING_MOVE_SCORE
 
-        print(self.move_scores)
+        print(self.possible_scores)
 
 
 
