@@ -83,9 +83,8 @@ class RunAndBunAI:
     def score_moves(self):
 
         for move_index, selection_chance in self.selection_chance.items():
-            self.possible_scores[move_index] = constants.MIN_DAMAGING_MOVE_SCORE,constants.MAX_DAMAGING_MOVE_SCORE,selection_chance
+            self.possible_scores[move_index] = constants.MIN_DAMAGING_MOVE_SCORE,constants.MAX_DAMAGING_MOVE_SCORE,[selection_chance]
             
-
     def get_highest_scoring_move(self):
 
         print(self.possible_scores)
@@ -95,21 +94,25 @@ class RunAndBunAI:
 
         expected_score = 0
 
-        for index, scores in enumerate(self.possible_scores.values()):
-            print(scores)
-            score = scores[index][score_index]
-            chance = scores[index][chance_index]
-            move_selection_chance = scores[-1]
+        for index, scores in self.possible_scores.items():
+            for _score in scores:
+                if len(_score) > 1:
+                    
+                    score = _score[score_index]
+                    chance = _score[chance_index]
+                    expected_score += score*chance
+                    print(expected_score)
 
-            print(score)
-            print(chance)
-            print(move_selection_chance)
+                else:
 
+                    move_selection_chance = _score[0]
 
-            eS = score*chance*move_selection_chance
-            expected_score += eS
+                    self.move_scores[index] = expected_score * move_selection_chance
+                    expected_score = 0
         
-            print(f"HERE: {expected_score}")
+        print(self.move_scores)
+        
+        
             
 
                 
