@@ -27,7 +27,7 @@ class RunAndBunAI:
 
         self.score_damaging_moves()
 
-        self.highest_scoring_move = max(self.move_scores, key=self.move_scores.get)
+        self.highest_scoring_move = max(self.move_scores)
 
         self.selected_move = self.decision_making_pokemon.moveset[self.highest_scoring_move]
 

@@ -6,6 +6,7 @@ import constants
 
 import math
 import numpy as np
+import numpy.typing as npt
 
 class DamageCalculation():
     def __init__(self,
@@ -28,7 +29,7 @@ class DamageCalculation():
 
         self.final_calc: bool = final_calc
 
-        self.damage_range: np.array = self.core_damage_calculation()
+        self.damage_range: npt.ArrayLike = self.core_damage_calculation()
 
         self.final_damage:int = max(self.damage_range)
 
@@ -37,7 +38,7 @@ class DamageCalculation():
         # self.all_damage_rolls = self.all_damage_rolls()
 
     
-    def core_damage_calculation(self) -> np.array:
+    def core_damage_calculation(self) -> npt.ArrayLike:
 
         if self.move_base_power == None:
             return 0
@@ -102,7 +103,7 @@ class DamageCalculation():
 
         return base_formula
 
-    def apply_random_int(self):
+    def apply_random_int(self) -> npt.ArrayLike:
         return np.array(constants.RANDOM_DAMAGE_INT)
     
     def apply_stab(self):
