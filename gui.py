@@ -300,7 +300,7 @@ class OpponentPokemonInfoFrame(tk.Frame):
 
         trainer_selection = self.trainers_combobox.get()
         self.battle_engine.init_game_state(trainer_selection)
-        trainer_team = t.BattlingTeam(False, trainer_selection)
+        trainer_team = t.BattlingTeam(self.battle_engine.game_state,False, trainer_selection)
 
         self.battle_frame.start_battle_button.configure(state="active")
         self.battle_frame.update_info()
