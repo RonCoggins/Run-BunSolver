@@ -9,8 +9,8 @@ class GameState():
 
     def __init__(self, opponent_trainer:str = "Youngster Tommy"):
         
-        self.opponent_info = GameStateOpponentInfo(opponent_trainer= opponent_trainer)
-        self.player_info = GameStatePlayerInfo()
+        self.opponent_info = GameStateOpponentInfo(self, opponent_trainer= opponent_trainer)
+        self.player_info = GameStatePlayerInfo(self)
         self.turn_info = GameStateTurnInfo()
 
         self.battle_over: bool = False
@@ -37,10 +37,11 @@ class GameState():
 
 class GameStateOpponentInfo():
 
-    def __init__(self, opponent_trainer:str = "Youngster Tommy"):
+    def __init__(self, parent: GameState, opponent_trainer:str = "Youngster Tommy"):
 
+        self.parent = parent
         self.trainer: str = opponent_trainer
-        self.team: t.BattlingTeam = t.BattlingTeam(self, player=False, opponent_name=self.trainer)
+        self.team: t.BattlingTeam = t.BattlingTeam(self.parent, player=False, opponent_name=self.trainer)
         self.no_of_pokemon: int = self.team.get_team_size()
         self.current_move: m.Move = ""
         
@@ -50,9 +51,10 @@ class GameStateOpponentInfo():
 
 class GameStatePlayerInfo():
 
-    def __init__(self):
-
-        self.team: t.BattlingTeam = t.BattlingTeam(self, player=True)
+    def __init__(self, parent: GameState):
+        
+        self.parent = parent 
+        self.team: t.BattlingTeam = t.BattlingTeam(self.parent, player=True)
         self.no_of_pokemon: int = self.team.get_team_size()
         self.current_move: m.Move = ""
         

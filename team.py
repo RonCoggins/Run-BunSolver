@@ -6,12 +6,13 @@ import typeddicts as td
 import constants
 
 import pokemon as p
+import game_state as gs
 import showdownparser
 import AIDecisionMaker.switchinai as siAI
 
 class BattlingTeam:
 
-    def __init__(self, game_state, player: bool, opponent_name:str|None = None):
+    def __init__(self, game_state: gs.GameState, player: bool, opponent_name:str|None = None):
 
         self.player: bool = player
         self.game_state = game_state

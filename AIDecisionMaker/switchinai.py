@@ -62,18 +62,12 @@ class SwitchInAI():
 
         print(scores)
 
-        return "slot_2"
+        highest_score = str(max(scores, key=scores.get))
 
-            
+        print(f"SWITCH IN DECISION: {highest_score}")
 
+        return highest_score
 
-
-
-
-
-
-            
-        
     def check_can_OHKO(self, pokemon: p.BattlingPokemon) -> bool:
 
         OHKO: bool = False
