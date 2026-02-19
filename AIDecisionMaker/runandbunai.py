@@ -3,6 +3,8 @@ import pokemon as p
 import game_state as gs
 import damagecalc as dc
 
+from itertools import combinations
+
 import numpy as np
 import numpy.typing as npt
 
@@ -21,10 +23,10 @@ class RunAndBunAI:
             self.decision_making_pokemon: p.BattlingPokemon = game_state.opponent_info.team.active_pokemon
             self.other_pokemon: p.BattlingPokemon = game_state.player_info.team.active_pokemon
 
-        self.damage_ranges: dict[str,npt.ArrayLike] = {"move1" : [],
-                                                    "move2" : [],
-                                                    "move3" : [],
-                                                    "move4" : [],}
+        self.move_category = {name: ("damaging" if move_object.base_power != None else "setup") for name, move_object in self.decision_making_pokemon.moveset.items()}
+
+
+        self.damage_ranges: dict[str,npt.ArrayLike] = {}
 
         self.possible_scores : dict[str, list[list[int|float]]] = {"move1" : [[]],
                                                                     "move2" : [[]],
@@ -41,76 +43,99 @@ class RunAndBunAI:
         
 
         self.score_moves()
-        self.get_highest_scoring_move()
         print(self.move_scores)
         self.highest_scoring_move = max(self.move_scores, key=self.move_scores.get)
-        self.selected_move = self.decision_making_pokemon.moveset[self.highest_scoring_move]
+        print(self.highest_scoring_move)
+        self.selected_move = self.decision_making_pokemon.moveset[self.highest_scoring_move]    
 
     def get_damage_ranges(self):
+        
+        damaging_moves = [key for key, value in self.move_category.items() if value == "damaging"]
+        
 
         for move_index, move_obj in self.decision_making_pokemon.moveset.items():
-            self.damage_ranges[move_index] = dc.DamageCalculation(
-                self.decision_making_pokemon, self.other_pokemon, move_obj, final_calc=False
-            ).damage_range
+            if move_index in damaging_moves:
+                self.damage_ranges[move_index] = dc.DamageCalculation(
+                    self.decision_making_pokemon, self.other_pokemon, move_obj, final_calc=False
+                ).damage_range
 
     def get_highest_damage_rolls(self):
 
-        range_matrix: npt.ArrayLike = np.zeros((4,16))
+        damaging_moves = [key for key, value in self.move_category.items() if value == "damaging"]
+
+        range_matrix: npt.ArrayLike = np.zeros((len(damaging_moves),16))
 
         for index, damage_range in enumerate(self.damage_ranges.values()):
             range_matrix[index] = damage_range
         
         highest_damage_array = np.max(range_matrix, axis=0)
         
-        overlapping_rolls :dict[str,int]= {"move1" : 0,
-                                            "move2" : 0,
-                                            "move3" : 0,
-                                            "move4" : 0,}
+        overlapping_rolls :dict[str,int]= {}
 
         total_rolls = 0
-        
+
         for index, damage_range in self.damage_ranges.items():
+            overlapping_rolls[index] = 0
             for damage_value in damage_range:
+                
                 if damage_value in highest_damage_array:
                     overlapping_rolls[index] += 1
                     total_rolls += 1
         
-        self.selection_chance :dict[str,int]= {"move1" : overlapping_rolls["move1"]/total_rolls,
-                                                "move2" : overlapping_rolls["move2"]/total_rolls,
-                                                "move3" : overlapping_rolls["move3"]/total_rolls,
-                                                "move4" : overlapping_rolls["move4"]/total_rolls,}
+        self.damaging_move_selection_chance :dict[str,float]= {name: value/total_rolls for name, value in overlapping_rolls.items()}
 
     def score_moves(self):
 
-        for move_index, selection_chance in self.selection_chance.items():
-            self.possible_scores[move_index] = constants.MIN_DAMAGING_MOVE_SCORE,constants.MAX_DAMAGING_MOVE_SCORE,[selection_chance]
-            
-    def get_highest_scoring_move(self):
+        move_selection_probability_list = [x for x in self.damaging_move_selection_chance.values()]
+        damaging_move_list = [key for key, value in self.move_category.items() if value == "damaging"]
 
-        print(self.possible_scores)
+        selected_highest_damage_move: str = np.random.choice(damaging_move_list, p=move_selection_probability_list)
+
+        self.move_scores[selected_highest_damage_move] = self.highest_damage_move_score()
+
+
+    def highest_damage_move_score(self):
 
         score_index = 0
         chance_index = 1
 
-        expected_score = 0
+        possible_scores = [constants.MAX_DAMAGING_MOVE_SCORE[score_index],constants.MIN_DAMAGING_MOVE_SCORE[score_index]]
+        scores_chances = [constants.MAX_DAMAGING_MOVE_SCORE[chance_index],constants.MIN_DAMAGING_MOVE_SCORE[chance_index]]
 
-        for index, scores in self.possible_scores.items():
-            for _score in scores:
-                if len(_score) > 1:
-                    
-                    score = _score[score_index]
-                    chance = _score[chance_index]
-                    expected_score += score*chance
-                    print(expected_score)
-
-                else:
-
-                    move_selection_chance = _score[0]
-
-                    self.move_scores[index] = expected_score * move_selection_chance
-                    expected_score = 0
+        print(possible_scores)
+        print(scores_chances)
         
-        print(self.move_scores)
+        selected_score = np.random.choice(possible_scores, p=scores_chances)
+
+        return selected_score
+
+
+
+
+
+
+
+
+
+            
+
+            
+
+
+
+        
+
+                
+        
+        
+
+                
+            
+
+
+    
+        
+    
         
         
             
