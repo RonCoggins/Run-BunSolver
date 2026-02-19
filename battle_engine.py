@@ -93,7 +93,7 @@ class BattleEngine:
             move= self.game_state.player_info.current_move,
         ).final_damage
 
-        self.game_state.player_info.damage_dealt_last_turn = damage
+        self.game_state.player_info.team.active_pokemon.current_turn_damage_dealt = damage
 
         self.game_state.opponent_info.team.active_pokemon.reduce_HP(damage)
 
@@ -109,7 +109,7 @@ class BattleEngine:
             self.game_state.opponent_info.current_move,
         ).final_damage
 
-        self.game_state.opponent_info.damage_dealt_last_turn = damage
+        self.game_state.opponent_info.team.active_pokemon.current_turn_damage_dealt = damage
 
         self.game_state.player_info.team.active_pokemon.reduce_HP(damage)
         print(

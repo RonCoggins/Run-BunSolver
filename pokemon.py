@@ -114,6 +114,9 @@ class BattlingPokemon(UserPokemon):
 
         self.current_HP: int = self.UserPokemon.stats["hp"]
 
+        self.current_turn_damage_dealt = 0
+        self.current_turn_damage_ranges = {}
+
         self.is_fainted: bool = False
 
     def __repr__(self):

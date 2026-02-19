@@ -43,7 +43,7 @@ class GameStateOpponentInfo():
         self.team: t.BattlingTeam = t.BattlingTeam(player=False, opponent_name=self.trainer)
         self.no_of_pokemon: int = self.team.get_team_size()
         self.current_move: m.Move = ""
-        self.damage_dealt_last_turn: int = 0
+        
 
     def reset_state(self):
         self.team.reset_team()
@@ -55,7 +55,7 @@ class GameStatePlayerInfo():
         self.team: t.BattlingTeam = t.BattlingTeam(player=True)
         self.no_of_pokemon: int = self.team.get_team_size()
         self.current_move: m.Move = ""
-        self.damage_dealt_last_turn: int = 0
+        
     
     def reset_state(self):
         self.team.reset_team()

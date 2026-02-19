@@ -59,6 +59,8 @@ class RunAndBunAI:
                     self.decision_making_pokemon, self.other_pokemon, move_obj, final_calc=False
                 ).damage_range
 
+        self.decision_making_pokemon.current_turn_damage_ranges = self.damage_ranges
+
     def get_highest_damage_rolls(self):
 
         damaging_moves = [key for key, value in self.move_category.items() if value == "damaging"]

@@ -3,6 +3,8 @@ from tkinter import ttk
 from pathlib import Path
 from functools import cache
 
+import numpy as np
+
 import team as t
 import pokemon as p
 import random
@@ -21,8 +23,8 @@ class GUI:
         
 
         root = tk.Tk()
-        height: int = 900
-        width: int = 900
+        height: int = 1500
+        width: int = 1000
         root.geometry(f"{height}x{width}")
         root.resizable(False,False)
 
@@ -85,7 +87,8 @@ class BattleFrame(tk.Frame):
         self.headers = {"pos1": "Active Pokemon",
                         "pos2": "Current HP",
                         "pos3": "Move Used Last",
-                        "pos4": "Damage Dealt"}
+                        "pos4": "Damage Dealt",
+                        "pos5": "Damage Ranges"}
         
         self.headers_labels = {}
         
@@ -110,6 +113,7 @@ class BattleFrame(tk.Frame):
         self.set_pokemon_health()
         self.set_pokemon_move_used()
         self.set_damage_dealt()
+        self.set_damage_ranges()
     
 
     def set_turn_number(self):
@@ -141,12 +145,22 @@ class BattleFrame(tk.Frame):
     def set_damage_dealt(self):
 
         self.player_damage_dealt = tk.StringVar()
-        self.player_damage_dealt.set(str(self.battle_engine.game_state.player_info.damage_dealt_last_turn)) 
+        self.player_damage_dealt.set(str(self.battle_engine.game_state.player_info.team.active_pokemon.current_turn_damage_dealt)) 
         tk.Label(self, textvariable=self.player_damage_dealt).grid(row=self.player_row,column=3)
 
         self.opponent_damage_dealt = tk.StringVar()
-        self.opponent_damage_dealt.set(str(self.battle_engine.game_state.opponent_info.damage_dealt_last_turn)) 
+        self.opponent_damage_dealt.set(str(self.battle_engine.game_state.opponent_info.team.active_pokemon.current_turn_damage_dealt)) 
         tk.Label(self, textvariable=self.opponent_damage_dealt).grid(row=self.opponent_row,column=3)
+    
+    def set_damage_ranges(self):
+        
+        self.player_damage_range = tk.StringVar()
+        self.player_damage_range.set(str(self.clean_damage_ranges(True))) 
+        tk.Label(self, textvariable=self.player_damage_range).grid(row=self.player_row,column=4)
+
+        self.opponent_damage_range = tk.StringVar()
+        self.opponent_damage_range.set(str(self.clean_damage_ranges(False))) 
+        tk.Label(self, textvariable=self.opponent_damage_range).grid(row=self.opponent_row,column=4)
 
     def update_active_pokemon_png(self):
 
@@ -168,8 +182,28 @@ class BattleFrame(tk.Frame):
                 self.active_pokemon_data[key]["png_label"].grid(row=4, column=0)
 
 
-    
-    
+    def clean_damage_ranges(self, player=True):
+        
+        string = ""
+        if player:
+            for move_index, range in self.battle_engine.game_state.player_info.team.active_pokemon.current_turn_damage_ranges.items():
+                string += f"{str(self.battle_engine.game_state.player_info.team.active_pokemon.moveset[move_index]).title()}: {np.array_str(range)}\n"
+        else:
+            for move_index, range in self.battle_engine.game_state.opponent_info.team.active_pokemon.current_turn_damage_ranges.items():
+                string += f"{str(self.battle_engine.game_state.opponent_info.team.active_pokemon.moveset[move_index]).title()}: {np.array_str(range)}\n"
+
+        return string
+
+
+        
+
+
+        if player:
+            damage_ranges = [range for move_index, range in self.battle_engine.game_state.player_info.team.active_pokemon.current_turn_damage_ranges.items()]
+        else:
+            damage_ranges = [range for move_index, range in self.battle_engine.game_state.opponent_info.team.active_pokemon.current_turn_damage_ranges.items()]
+
+        return damage_ranges
 
 
     
