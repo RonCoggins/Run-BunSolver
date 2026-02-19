@@ -32,6 +32,7 @@ class DamageCalculation():
         self.damage_range: npt.ArrayLike = self.core_damage_calculation()
 
         self.final_damage:int = np.max(self.damage_range)
+        self.max_roll:int = np.max(self.damage_range)
 
         # self.max_damage = self.final_damage_calculation("max")
         # self.min_damage = self.final_damage_calculation("min")

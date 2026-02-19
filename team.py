@@ -7,13 +7,14 @@ import constants
 
 import pokemon as p
 import showdownparser
-
+import AIDecisionMaker.switchinai as siAI
 
 class BattlingTeam:
 
-    def __init__(self, player: bool, opponent_name:str|None = None):
+    def __init__(self, game_state, player: bool, opponent_name:str|None = None):
 
         self.player: bool = player
+        self.game_state = game_state
 
         if player:
             self.opponent_name = None
@@ -133,11 +134,11 @@ class BattlingTeam:
     def perform_switch(self):
         print("Performing switch")
         if self.player:
-            slot_being_switched_to: str = pAI.SwitchInAIDecision(self.remaining_pokemon).switch_in_decision
+            slot_being_switched_to: str = siAI.SwitchInAI(self.game_state,True).get_switch_in_decision()
             self.active_pokemon = self.team[slot_being_switched_to]
             print(f"Player active pokemon is now: {self.active_pokemon}")
         else:
-            slot_being_switched_to: str = oAI.SwitchInAIDecision(self.remaining_pokemon).switch_in_decision
+            slot_being_switched_to: str = siAI.SwitchInAI(self.game_state,False).get_switch_in_decision()
             self.active_pokemon = self.team[slot_being_switched_to]
             print(f"Opponent active pokemon is now: {self.active_pokemon}")
     
