@@ -1,7 +1,6 @@
 import random
 
 import logging
-from timeit_decorator import timeit_sync
 
 import damagecalc as dc
 import move as m

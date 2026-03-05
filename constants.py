@@ -1,8 +1,6 @@
 
 MAX_TEAM_SIZE: int = 6
 
-
-
 CRITICAL_HIT_RATIO: float = 1.5
 CRITICAL_HIT_CHANCE: float = 0.5
 

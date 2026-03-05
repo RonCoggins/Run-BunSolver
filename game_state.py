@@ -16,7 +16,7 @@ class GameState():
         self.battle_over: bool = False
         self.winner: str = ""
 
-    def determine_if_winner(self):
+    def determine_if_winner(self) -> bool:
 
         if self.opponent_info.team.number_of_remaining_pokemon() == 0:
             self.winner = "player"
