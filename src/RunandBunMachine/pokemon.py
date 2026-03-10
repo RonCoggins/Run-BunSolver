@@ -1,9 +1,9 @@
 
 import math
-import move as m
+import src.RunandBunMachine.move as m
 
 
-import constants
+import src.constants.constants as constants
 
 class BasePokemon:
 

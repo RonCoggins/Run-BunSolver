@@ -4,7 +4,7 @@ def load_move_stats() -> dict[str, dict[str, str | int]]:
 
     move_stats: dict[str, dict[str, str | int]] = {}
 
-    with open("movestats.json","r") as file:
+    with open("src/constants/movestats.json","r") as file:
         move_stats = json.load(file)
 
     return move_stats

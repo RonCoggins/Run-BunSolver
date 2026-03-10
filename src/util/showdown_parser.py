@@ -1,6 +1,6 @@
 import json
 
-import constants
+import src.constants.constants as constants
 
 constants.POKEMON_STATS
 class ShowdownParser():

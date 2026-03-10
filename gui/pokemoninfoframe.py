@@ -5,10 +5,10 @@ from functools import cache
 
 import numpy as np
 
-import team as t
-import pokemon as p
-import game_state as gs
-import battle_engine as be
+import src.RunandBunMachine.team as t
+import src.RunandBunMachine.pokemon as p
+import src.RunandBunMachine.game_state as gs
+import src.RunandBunMachine.battle_engine as be
 
 from gui.util import BlankFrame
 

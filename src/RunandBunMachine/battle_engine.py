@@ -2,14 +2,13 @@ import random
 
 import logging
 
-import damagecalc as dc
-import move as m
-import game_state as gs
-import team as t
-import AIDecisionMaker.maxdamageai as AIMax
-import AIDecisionMaker.runandbunai as AIRnB
-import decisiontree as dt
-import pokemon as p
+import src.RunandBunMachine.damage_calc as dc
+import src.RunandBunMachine.move as m
+import src.RunandBunMachine.game_state as gs
+import src.RunandBunMachine.team as t
+import src.ai.maxdamageai as AIMax
+import src.ai.runandbunai as AIRnB
+import src.RunandBunMachine.pokemon as p
 
 class BattleEngine:
 

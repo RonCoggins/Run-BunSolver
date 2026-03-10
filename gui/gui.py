@@ -3,7 +3,7 @@ from tkinter import ttk
 from pathlib import Path
 
 
-import battle_engine as be
+import src.RunandBunMachine.battle_engine as be
 
 
 from gui.opponentteamselect import OpponentTeamSelectFrame
@@ -12,7 +12,7 @@ from gui.battlewindow import BattleFrame
 
 
 
-PNG_DIRECTORY = Path('./png')
+PNG_DIRECTORY = Path('./gui/assets/png')
 
 class GUI:
     def __init__(self, battle_engine: be.BattleEngine):

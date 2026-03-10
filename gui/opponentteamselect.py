@@ -1,4 +1,4 @@
-import battle_engine
+import src.RunandBunMachine.battle_engine as battle_engine
 import tkinter as tk
 from tkinter import ttk
 from pathlib import Path
@@ -6,16 +6,16 @@ from functools import cache
 
 import numpy as np
 
-import team as t
-import pokemon as p
-import game_state as gs
-import battle_engine as be
-import opponenttrainers
+import src.RunandBunMachine.team as t
+import src.RunandBunMachine.pokemon as p
+import src.RunandBunMachine.game_state as gs
+import src.RunandBunMachine.battle_engine as be
+import src.constants.opponenttrainers as opponenttrainers
 
 from gui.pokemoninfoframe import PokemonInformationFrame
 from gui.util import BlankFrame
 
-PNG_DIRECTORY = Path('./png')
+PNG_DIRECTORY = Path('./gui/assets/png')
 
 class OpponentTeamSelectFrame(tk.Frame):
 

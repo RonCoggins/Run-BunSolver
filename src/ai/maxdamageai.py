@@ -1,7 +1,7 @@
-import move as m
-import pokemon as p
-import game_state as gs
-import damagecalc as dc
+import src.RunandBunMachine.move as m
+import src.RunandBunMachine.pokemon as p
+import src.RunandBunMachine.game_state as gs
+import src.RunandBunMachine.damage_calc as dc
 
 
 class MaxDamageAI:

@@ -1,14 +1,13 @@
-import json
 
-import opponenttrainers as opptrainers
-import typeddicts as td
+import src.constants.opponenttrainers as opptrainers
+import src.util.typed_dicts as td
 
-import constants
+import src.constants.constants as constants
 
-import pokemon as p
-import game_state as gs
-import showdownparser
-import AIDecisionMaker.switchinai as siAI
+import src.RunandBunMachine.pokemon as p
+import src.RunandBunMachine.game_state as gs
+import src.util.showdown_parser as showdown_parser
+import src.ai.switchinai as siAI
 
 class BattlingTeam:
 
@@ -42,7 +41,7 @@ class BattlingTeam:
 
     def load_player_team(self):
         
-        trainer_team = showdownparser.ShowdownParser().team
+        trainer_team = showdown_parser.ShowdownParser().team
 
         pokemon_names: list[str] = list(trainer_team.keys())
         number_of_pokemon:int = len(trainer_team.keys())

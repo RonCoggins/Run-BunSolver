@@ -1,8 +1,8 @@
-import pokemon as p
-import move as m
-import type_advantage as t
+import src.RunandBunMachine.pokemon as p
+import src.RunandBunMachine.move as m
+import src.constants.type_advantage as t
 
-import constants
+import src.constants.constants as constants
 
 import math
 import numpy as np

@@ -1,14 +1,14 @@
-import move as m
-import pokemon as p
-import game_state as gs
-import damagecalc as dc
+import src.RunandBunMachine.move as m
+import src.RunandBunMachine.pokemon as p
+import src.RunandBunMachine.game_state as gs
+import src.RunandBunMachine.damage_calc as dc
 
 from itertools import combinations
 
 import numpy as np
 import numpy.typing as npt
 
-import AIDecisionMaker.runandbunaiconstants as constants
+import src.ai.runandbunaiconstants as constants
 
 class RunAndBunAI:
 

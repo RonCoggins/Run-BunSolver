@@ -1,9 +1,9 @@
 
 
 from typing import Any
-import move as m
-import pokemon as p
-import team as t
+import src.RunandBunMachine.move as m
+import src.RunandBunMachine.pokemon as p
+import src.RunandBunMachine.team as t
 
 class GameState():
 

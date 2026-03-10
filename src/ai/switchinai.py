@@ -1,8 +1,8 @@
-import game_state as gs
-import damagecalc as dc
+import src.RunandBunMachine.game_state as gs
+import src.RunandBunMachine.damage_calc as dc
 
-import pokemon as p
-import team as t
+import src.RunandBunMachine.pokemon as p
+import src.RunandBunMachine.team as t
 
 import numpy as np
 

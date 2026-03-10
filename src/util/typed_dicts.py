@@ -1,5 +1,5 @@
 from typing import TypedDict, NotRequired
-from pokemon import BasePokemon, UserPokemon, BattlingPokemon
+from src.RunandBunMachine.pokemon import BasePokemon, UserPokemon, BattlingPokemon
 
 class TeamDict(TypedDict):
     slot1: NotRequired[BattlingPokemon]
